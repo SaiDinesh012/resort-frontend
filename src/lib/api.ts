@@ -1,4 +1,9 @@
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
+const rawBase = (process.env.NEXT_PUBLIC_API_URL || "/api").trim().replace(/\/$/, "");
+export const API_BASE_URL = rawBase.endsWith("/api")
+  ? rawBase
+  : rawBase.startsWith("http")
+  ? `${rawBase}/api`
+  : rawBase;
 
 export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
   const url = endpoint.startsWith("http")
