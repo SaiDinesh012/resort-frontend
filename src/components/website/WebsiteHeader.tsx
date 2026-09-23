@@ -21,7 +21,7 @@ export function WebsiteHeader() {
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/settings?key=site_config`, { cache: 'no-store' })
-      .then(res => res.json())
+      .then(res => (res.ok && res.headers.get("content-type")?.includes("application/json") ? res.json() : null))
       .then(data => {
         if (data && data.siteName) {
           setSiteName(data.siteName);

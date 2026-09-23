@@ -25,3 +25,15 @@ export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
 
   return res.json();
 }
+
+export async function safeJson<T = any>(res: Response): Promise<T | null> {
+  try {
+    const contentType = res.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      return null;
+    }
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
