@@ -1,0 +1,139 @@
+/*
+ * ck-content.css
+ * Styles for rendering CKEditor HTML output on the public website.
+ * Scope all rules under .ck-content so they don't bleed globally.
+ */
+
+.ck-content {
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: #6b6560; /* warm-gray */
+}
+
+/* Paragraphs */
+.ck-content p {
+  margin-bottom: 1rem;
+  color: #6b6560;
+  line-height: 1.75;
+}
+
+.ck-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Headings */
+.ck-content h2 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.ck-content h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+/* Inline text */
+.ck-content strong,
+.ck-content b {
+  font-weight: 700;
+  color: #2d2d2d;
+}
+
+.ck-content em,
+.ck-content i {
+  font-style: italic;
+}
+
+.ck-content u {
+  text-decoration: underline;
+}
+
+.ck-content s {
+  text-decoration: line-through;
+}
+
+/* Links */
+.ck-content a {
+  color: #8b6340; /* primary */
+  text-decoration: underline;
+  transition: color 0.15s;
+}
+
+.ck-content a:hover {
+  color: #6b4c2f; /* primary-dark */
+}
+
+/* Unordered list */
+.ck-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 1.25rem 0;
+  space-y: 0.5rem;
+}
+
+.ck-content ul li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.9375rem;
+  color: #2d2d2d;
+  margin-bottom: 0.6rem;
+}
+
+.ck-content ul li::before {
+  content: "";
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-top: 0.15rem;
+  border-radius: 50%;
+  background-color: rgba(139, 99, 64, 0.12);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%238b6340' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 10px;
+}
+
+/* Ordered list */
+.ck-content ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+  margin: 0.75rem 0 1.25rem 0;
+}
+
+.ck-content ol li {
+  font-size: 0.9375rem;
+  color: #2d2d2d;
+  margin-bottom: 0.5rem;
+  padding-left: 0.25rem;
+}
+
+/* Blockquote */
+.ck-content blockquote {
+  border-left: 3px solid #8b6340;
+  padding: 0.75rem 1rem 0.75rem 1.25rem;
+  margin: 1.25rem 0;
+  background: rgba(139, 99, 64, 0.05);
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+  color: #6b6560;
+}
+
+/* Horizontal rule */
+.ck-content hr {
+  border: none;
+  border-top: 1px solid #e5e0d8;
+  margin: 1.5rem 0;
+}
