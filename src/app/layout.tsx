@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 import "@/styles/globals.css";
-import connectDB from "@/lib/mongodb";
-import Setting from "@/lib/models/Setting";
 import { SITE_NAME, SITE_TAGLINE, SITE_DESCRIPTION } from "@/lib/constants";
+import { API_BASE_URL } from "@/lib/api";
 
 export async function generateMetadata(): Promise<Metadata> {
   let siteName = SITE_NAME;
@@ -12,16 +11,21 @@ export async function generateMetadata(): Promise<Metadata> {
   let description = SITE_DESCRIPTION;
 
   try {
-    await connectDB();
-    const config = await Setting.findOne({ key: "site_config" });
-    if (config && config.value) {
-      const val = config.value as any;
-      siteName = val.siteName || siteName;
-      tagline = val.tagline || val.heroSubtitle || tagline;
-      description = val.description || description;
+    if (API_BASE_URL && API_BASE_URL.startsWith("http")) {
+      const res = await fetch(`${API_BASE_URL}/settings?key=site_config`, {
+        next: { revalidate: 60 },
+      });
+      if (res.ok) {
+        const val = await res.json();
+        if (val) {
+          siteName = val.siteName || siteName;
+          tagline = val.tagline || val.heroSubtitle || tagline;
+          description = val.description || description;
+        }
+      }
     }
   } catch (error) {
-    console.warn("Failed to fetch dynamic metadata:", error);
+    // Fallback to default constants
   }
 
   return {

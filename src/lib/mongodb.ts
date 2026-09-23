@@ -18,9 +18,10 @@ if (!global.mongooseCache) {
   global.mongooseCache = cached;
 }
 
-export async function connectDB(): Promise<typeof mongoose> {
+export async function connectDB(): Promise<typeof mongoose | null> {
   if (!MONGODB_URI) {
-    throw new Error("Please define the MONGODB_URI environment variable inside .env.local");
+    console.warn("[MongoDB] MONGODB_URI not defined. Database operation skipped.");
+    return null;
   }
 
   if (cached.conn) {
