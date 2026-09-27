@@ -21,8 +21,12 @@ export default function SettingsPage() {
     phone: "",
     email: "",
     address: "",
-    checkInTime: "",
-    checkOutTime: "",
+    checkInTime: "12:00 PM",
+    checkOutTime: "11:00 AM",
+    overstayGraceMinutes: 30,
+    overstayHourlyRate: 500,
+    earlyCheckInHourlyRate: 400,
+    cleaningBufferMinutes: 45,
     heroTitle: "",
     heroSubtitle: "",
     heroTextColor: "#ffffff",
@@ -74,6 +78,10 @@ export default function SettingsPage() {
             address: data.address ?? prev.address,
             checkInTime: data.checkInTime ?? prev.checkInTime,
             checkOutTime: data.checkOutTime ?? prev.checkOutTime,
+            overstayGraceMinutes: data.overstayGraceMinutes !== undefined ? Number(data.overstayGraceMinutes) : prev.overstayGraceMinutes,
+            overstayHourlyRate: data.overstayHourlyRate !== undefined ? Number(data.overstayHourlyRate) : prev.overstayHourlyRate,
+            earlyCheckInHourlyRate: data.earlyCheckInHourlyRate !== undefined ? Number(data.earlyCheckInHourlyRate) : prev.earlyCheckInHourlyRate,
+            cleaningBufferMinutes: data.cleaningBufferMinutes !== undefined ? Number(data.cleaningBufferMinutes) : prev.cleaningBufferMinutes,
             heroTitle: data.heroTitle ?? prev.heroTitle,
             heroSubtitle: data.heroSubtitle ?? prev.heroSubtitle,
             heroTextColor: data.heroTextColor ?? prev.heroTextColor,
@@ -382,24 +390,72 @@ export default function SettingsPage() {
                   className="w-full px-3 py-2 rounded border border-border text-charcoal focus:outline-none focus:border-primary"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-warm-gray font-semibold mb-1">Standard Check-in Time</label>
-                  <input
-                    type="text"
-                    value={settings.checkInTime}
-                    onChange={(e) => setSettings({ ...settings, checkInTime: e.target.value })}
-                    className="w-full px-3 py-2 rounded border border-border text-charcoal focus:outline-none focus:border-primary"
-                  />
+              {/* Operations & Overstay Rules Card */}
+              <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-4">
+                <div className="flex items-center justify-between border-b border-primary/10 pb-2">
+                  <div>
+                    <h3 className="font-semibold text-charcoal text-sm">Resort Timings & Overstay Charges</h3>
+                    <p className="text-[11px] text-warm-gray">Configure check-in/out policies, grace windows, and hourly fees for guest overstay</p>
+                  </div>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-primary text-white">PMS Rules</span>
                 </div>
-                <div>
-                  <label className="block text-warm-gray font-semibold mb-1">Standard Check-out Time</label>
-                  <input
-                    type="text"
-                    value={settings.checkOutTime}
-                    onChange={(e) => setSettings({ ...settings, checkOutTime: e.target.value })}
-                    className="w-full px-3 py-2 rounded border border-border text-charcoal focus:outline-none focus:border-primary"
-                  />
+
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-charcoal font-semibold mb-1">Standard Check-in Time</label>
+                    <input
+                      type="text"
+                      value={settings.checkInTime}
+                      onChange={(e) => setSettings({ ...settings, checkInTime: e.target.value })}
+                      placeholder="e.g. 12:00 PM"
+                      className="w-full px-3 py-2 rounded-lg border border-border bg-white text-charcoal focus:outline-none focus:border-primary text-xs"
+                    />
+                    <p className="text-[10px] text-warm-gray mt-0.5">Default check-in slot offered to guests</p>
+                  </div>
+                  <div>
+                    <label className="block text-charcoal font-semibold mb-1">Standard Check-out Time</label>
+                    <input
+                      type="text"
+                      value={settings.checkOutTime}
+                      onChange={(e) => setSettings({ ...settings, checkOutTime: e.target.value })}
+                      placeholder="e.g. 11:00 AM"
+                      className="w-full px-3 py-2 rounded-lg border border-border bg-white text-charcoal focus:outline-none focus:border-primary text-xs"
+                    />
+                    <p className="text-[10px] text-warm-gray mt-0.5">Threshold after which overstay timer begins</p>
+                  </div>
+                </div>
+
+                <div className="grid sm:grid-cols-3 gap-4 pt-1">
+                  <div>
+                    <label className="block text-charcoal font-semibold mb-1">Hourly Overstay Rate (₹)</label>
+                    <input
+                      type="number"
+                      value={settings.overstayHourlyRate}
+                      onChange={(e) => setSettings({ ...settings, overstayHourlyRate: Number(e.target.value) })}
+                      className="w-full px-3 py-2 rounded-lg border border-border bg-white text-charcoal focus:outline-none focus:border-primary text-xs"
+                    />
+                    <p className="text-[10px] text-warm-gray mt-0.5">Billed per hour after grace period</p>
+                  </div>
+                  <div>
+                    <label className="block text-charcoal font-semibold mb-1">Grace Period (Minutes)</label>
+                    <input
+                      type="number"
+                      value={settings.overstayGraceMinutes}
+                      onChange={(e) => setSettings({ ...settings, overstayGraceMinutes: Number(e.target.value) })}
+                      className="w-full px-3 py-2 rounded-lg border border-border bg-white text-charcoal focus:outline-none focus:border-primary text-xs"
+                    />
+                    <p className="text-[10px] text-warm-gray mt-0.5">Free minutes before charging extra</p>
+                  </div>
+                  <div>
+                    <label className="block text-charcoal font-semibold mb-1">Housekeeping Buffer (Mins)</label>
+                    <input
+                      type="number"
+                      value={settings.cleaningBufferMinutes}
+                      onChange={(e) => setSettings({ ...settings, cleaningBufferMinutes: Number(e.target.value) })}
+                      className="w-full px-3 py-2 rounded-lg border border-border bg-white text-charcoal focus:outline-none focus:border-primary text-xs"
+                    />
+                    <p className="text-[10px] text-warm-gray mt-0.5">Cleaning duration before room is ready</p>
+                  </div>
                 </div>
               </div>
               <div>

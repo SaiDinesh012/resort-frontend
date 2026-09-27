@@ -17,12 +17,14 @@ export interface IRoom extends Document {
   basePrice: number;
   weekendPrice: number;
   taxRate: number;
-  status: "available" | "occupied" | "maintenance" | "blocked" | "active" | "inactive";
+  status: "available" | "occupied" | "maintenance" | "blocked" | "cleaning" | "active" | "inactive";
   rating: number;
   reviewCount: number;
   featured: boolean;
   floorLevel?: string;
   view?: string;
+  currentBookingId?: string;
+  lockedUntil?: string;
 }
 
 const RoomSchema = new Schema<IRoom>(
@@ -50,7 +52,7 @@ const RoomSchema = new Schema<IRoom>(
     taxRate: { type: Number, default: 18 },
     status: {
       type: String,
-      enum: ["available", "occupied", "maintenance", "blocked", "active", "inactive"],
+      enum: ["available", "occupied", "maintenance", "blocked", "cleaning", "active", "inactive"],
       default: "available",
     },
     rating: { type: Number, default: 4.8 },
@@ -58,6 +60,8 @@ const RoomSchema = new Schema<IRoom>(
     featured: { type: Boolean, default: false },
     floorLevel: { type: String, default: "" },
     view: { type: String, default: "" },
+    currentBookingId: { type: String },
+    lockedUntil: { type: String },
   },
   { timestamps: true }
 );

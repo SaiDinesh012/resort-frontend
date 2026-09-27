@@ -3,6 +3,7 @@ import connectDB from "@/lib/mongodb";
 import Booking from "@/lib/models/Booking";
 import Customer from "@/lib/models/Customer";
 import Payment from "@/lib/models/Payment";
+import Room from "@/lib/models/Room";
 
 export async function GET(request: Request) {
   try {
@@ -11,10 +12,12 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
     const type = searchParams.get("type");
+    const roomId = searchParams.get("roomId");
 
     const query: any = {};
     if (status && status !== "all") query.bookingStatus = status;
     if (type) query.type = type;
+    if (roomId) query.roomId = roomId;
 
     const bookings = await Booking.find(query).sort({ createdAt: -1 });
 
@@ -43,6 +46,8 @@ export async function POST(request: Request) {
       packageName: body.packageName,
       checkIn: body.checkIn,
       checkOut: body.checkOut,
+      estimatedCheckInTime: body.estimatedCheckInTime || "12:00 PM - 02:00 PM",
+      estimatedCheckOutTime: body.estimatedCheckOutTime || "10:00 AM - 11:00 AM",
       nights: body.nights || 1,
       adults: body.adults || 1,
       children: body.children || 0,
@@ -61,6 +66,24 @@ export async function POST(request: Request) {
         },
       ],
     });
+
+    // Auto-lock or update Room status
+    if (body.type === "room" && body.roomId) {
+      try {
+        const todayStr = new Date().toISOString().split("T")[0];
+        const isCurrentlyOccupied = body.checkIn <= todayStr && body.checkOut >= todayStr;
+        await Room.findOneAndUpdate(
+          { $or: [{ id: body.roomId }, { _id: body.roomId }] },
+          {
+            currentBookingId: bookingId,
+            lockedUntil: body.checkOut,
+            ...(isCurrentlyOccupied ? { status: "occupied" } : {}),
+          }
+        );
+      } catch (rErr) {
+        console.warn("Could not update room lock status:", rErr);
+      }
+    }
 
     // Auto update or create Customer
     if (body.guestDetails?.email) {

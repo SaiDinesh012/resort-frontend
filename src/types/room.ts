@@ -15,12 +15,14 @@ export interface Room {
   basePrice: number;
   weekendPrice: number;
   taxRate: number;
-  status: "available" | "occupied" | "maintenance" | "blocked";
+  status: "available" | "occupied" | "maintenance" | "blocked" | "cleaning";
   rating: number;
   reviewCount: number;
   featured: boolean;
   floorLevel?: string;
   view?: string;
+  currentBookingId?: string;
+  lockedUntil?: string;
 }
 
 export interface RoomRate {

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Booking from "@/lib/models/Booking";
+import Room from "@/lib/models/Room";
 
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
   try {
@@ -34,10 +35,36 @@ export async function PUT(request: Request, context: { params: Promise<{ id: str
     if (body.bookingStatus && body.bookingStatus !== booking.bookingStatus) {
       booking.timeline.push({
         timestamp: new Date().toISOString(),
-        event: "Status Changed",
+        event: `Status: ${body.bookingStatus}`,
         description: `Booking status updated from ${booking.bookingStatus} to ${body.bookingStatus}`,
-        actor: "Admin",
+        actor: body.actor || "Admin",
       });
+
+      // Synchronize Room status with booking progression
+      if (booking.roomId) {
+        try {
+          if (body.bookingStatus === "checked-in") {
+            if (!body.actualCheckIn) body.actualCheckIn = new Date().toISOString();
+            await Room.findOneAndUpdate(
+              { $or: [{ id: booking.roomId }, { _id: booking.roomId }] },
+              { status: "occupied", currentBookingId: booking.id, lockedUntil: booking.checkOut }
+            );
+          } else if (body.bookingStatus === "checked-out" || body.bookingStatus === "completed") {
+            if (!body.actualCheckOut) body.actualCheckOut = new Date().toISOString();
+            await Room.findOneAndUpdate(
+              { $or: [{ id: booking.roomId }, { _id: booking.roomId }] },
+              { status: "cleaning", currentBookingId: null }
+            );
+          } else if (body.bookingStatus === "cancelled") {
+            await Room.findOneAndUpdate(
+              { $or: [{ id: booking.roomId }, { _id: booking.roomId }] },
+              { status: "available", currentBookingId: null, lockedUntil: null }
+            );
+          }
+        } catch (rErr) {
+          console.warn("Could not sync room status on booking update:", rErr);
+        }
+      }
     }
 
     Object.assign(booking, body);

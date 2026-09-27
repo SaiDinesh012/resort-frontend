@@ -10,6 +10,12 @@ export interface IBooking extends Document {
   packageName?: string;
   checkIn: string;
   checkOut: string;
+  estimatedCheckInTime?: string;
+  estimatedCheckOutTime?: string;
+  actualCheckIn?: string;
+  actualCheckOut?: string;
+  overstayHours?: number;
+  overstayCharges?: number;
   nights: number;
   adults: number;
   children: number;
@@ -37,7 +43,7 @@ export interface IBooking extends Document {
   };
   paymentStatus: "paid" | "pending" | "failed" | "refunded" | "partial";
   paymentMethod?: string;
-  bookingStatus: "confirmed" | "pending" | "cancelled" | "completed" | "no-show";
+  bookingStatus: "confirmed" | "checked-in" | "checked-out" | "pending" | "cancelled" | "completed" | "no-show";
   notes?: string;
   timeline: {
     timestamp: string;
@@ -60,6 +66,12 @@ const BookingSchema = new Schema<IBooking>(
     packageName: { type: String },
     checkIn: { type: String, required: true },
     checkOut: { type: String, required: true },
+    estimatedCheckInTime: { type: String },
+    estimatedCheckOutTime: { type: String },
+    actualCheckIn: { type: String },
+    actualCheckOut: { type: String },
+    overstayHours: { type: Number, default: 0 },
+    overstayCharges: { type: Number, default: 0 },
     nights: { type: Number, required: true },
     adults: { type: Number, required: true, default: 1 },
     children: { type: Number, default: 0 },
@@ -93,7 +105,7 @@ const BookingSchema = new Schema<IBooking>(
     paymentMethod: { type: String, default: "card" },
     bookingStatus: {
       type: String,
-      enum: ["confirmed", "pending", "cancelled", "completed", "no-show"],
+      enum: ["confirmed", "checked-in", "checked-out", "pending", "cancelled", "completed", "no-show"],
       default: "confirmed",
     },
     notes: { type: String },

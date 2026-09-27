@@ -1,4 +1,4 @@
-export type BookingStatus = "confirmed" | "pending" | "cancelled" | "completed" | "no-show";
+export type BookingStatus = "confirmed" | "checked-in" | "checked-out" | "pending" | "cancelled" | "completed" | "no-show";
 export type PaymentStatus = "paid" | "pending" | "failed" | "refunded" | "partial";
 export type BookingType = "room" | "package";
 
@@ -43,6 +43,12 @@ export interface Booking {
   packageName?: string;
   checkIn: string;
   checkOut: string;
+  estimatedCheckInTime?: string;
+  estimatedCheckOutTime?: string;
+  actualCheckIn?: string;
+  actualCheckOut?: string;
+  overstayHours?: number;
+  overstayCharges?: number;
   nights: number;
   adults: number;
   children: number;

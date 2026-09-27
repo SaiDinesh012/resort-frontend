@@ -33,6 +33,8 @@ function BookingContent() {
   const [checkOut, setCheckOut] = useState(checkOutParam || threeDaysLater);
   const [adults, setAdults] = useState(adultsParam ? parseInt(adultsParam, 10) : 2);
   const [children, setChildren] = useState(childrenParam ? parseInt(childrenParam, 10) : 0);
+  const [estimatedCheckInTime, setEstimatedCheckInTime] = useState("12:00 PM - 02:00 PM");
+  const [estimatedCheckOutTime, setEstimatedCheckOutTime] = useState("10:00 AM - 11:00 AM");
 
   // Auth & Guest Info
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -296,6 +298,8 @@ function BookingContent() {
         packageName: bookingType === "package" ? selectedPackage?.name : undefined,
         checkIn,
         checkOut,
+        estimatedCheckInTime,
+        estimatedCheckOutTime,
         nights,
         adults,
         children,
@@ -583,6 +587,41 @@ function BookingContent() {
                   </div>
                 </div>
 
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-warm-gray uppercase tracking-wider mb-2">
+                      Estimated Arrival / Check-in Time
+                    </label>
+                    <select
+                      value={estimatedCheckInTime}
+                      onChange={(e) => setEstimatedCheckInTime(e.target.value)}
+                      className="w-full px-4 py-3 rounded-md border border-border text-charcoal bg-background focus:outline-none text-xs"
+                    >
+                      <option value="12:00 PM - 02:00 PM">12:00 PM - 02:00 PM (Standard Check-in)</option>
+                      <option value="02:00 PM - 04:00 PM">02:00 PM - 04:00 PM (Afternoon)</option>
+                      <option value="04:00 PM - 06:00 PM">04:00 PM - 06:00 PM (Late Afternoon)</option>
+                      <option value="06:00 PM - 08:00 PM">06:00 PM - 08:00 PM (Evening)</option>
+                      <option value="After 08:00 PM">After 08:00 PM (Late Night Arrival)</option>
+                      <option value="Early Check-in (Before 12 PM)">Early Check-in (Before 12:00 PM - Subject to availability)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-warm-gray uppercase tracking-wider mb-2">
+                      Estimated Departure / Check-out Time
+                    </label>
+                    <select
+                      value={estimatedCheckOutTime}
+                      onChange={(e) => setEstimatedCheckOutTime(e.target.value)}
+                      className="w-full px-4 py-3 rounded-md border border-border text-charcoal bg-background focus:outline-none text-xs"
+                    >
+                      <option value="09:00 AM - 10:00 AM">09:00 AM - 10:00 AM (Early Departure)</option>
+                      <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM (Standard Check-out)</option>
+                      <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM (Within Grace Period)</option>
+                      <option value="Late Check-out (After 12 PM)">Late Check-out (Hourly Overstay Rate applies)</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div className="pt-4 flex justify-between">
                   <button onClick={() => hasPreselectedItem ? router.back() : setStep(1)} className="px-5 py-2.5 rounded-md border border-border text-charcoal text-sm font-medium hover:bg-border/30 transition-colors flex items-center gap-1 cursor-pointer"><ArrowLeft className="size-4" /> Back</button>
                   <button
@@ -846,8 +885,8 @@ function BookingContent() {
                 <div className="p-4 bg-background rounded-lg border border-border max-w-md mx-auto text-left text-xs space-y-2 text-warm-gray">
                   <div className="flex justify-between"><span className="font-medium text-charcoal">Resort:</span> <span>Vanapriya Resort, Western Ghats</span></div>
                   <div className="flex justify-between"><span className="font-medium text-charcoal">Item:</span> <span>{bookingType === "room" ? selectedRoom?.name : selectedPackage?.name}</span></div>
-                  <div className="flex justify-between"><span className="font-medium text-charcoal">Check-in:</span> <span>{checkIn.split("-").reverse().join("/")}</span></div>
-                  <div className="flex justify-between"><span className="font-medium text-charcoal">Check-out:</span> <span>{checkOut.split("-").reverse().join("/")}</span></div>
+                  <div className="flex justify-between"><span className="font-medium text-charcoal">Check-in:</span> <span>{checkIn.split("-").reverse().join("/")} • {estimatedCheckInTime}</span></div>
+                  <div className="flex justify-between"><span className="font-medium text-charcoal">Check-out:</span> <span>{checkOut.split("-").reverse().join("/")} • {estimatedCheckOutTime}</span></div>
                   <div className="flex justify-between"><span className="font-medium text-charcoal">Amount Paid:</span> <span className="font-bold text-charcoal">{formatCurrency(grandTotal)}</span></div>
                 </div>
 
