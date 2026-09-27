@@ -217,13 +217,28 @@ export default function RoomsManagementPage() {
 
       {/* Add / Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-surface rounded-xl border border-border shadow-2xl max-w-2xl w-full p-6 space-y-6 my-8">
+        <div 
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div 
+            className="relative bg-white rounded-2xl border border-border shadow-2xl max-w-2xl w-full p-6 sm:p-8 space-y-6 my-8 z-10"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between border-b border-border pb-4">
-              <h2 className="font-serif text-xl font-bold text-charcoal">
-                {editingRoom ? "Edit Room Details" : "Add New Room"}
-              </h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-warm-gray hover:text-charcoal cursor-pointer">
+              <div>
+                <h2 className="font-serif text-xl font-bold text-charcoal">
+                  {editingRoom ? "Edit Room Details" : "Add New Room"}
+                </h2>
+                <p className="text-xs text-warm-gray mt-0.5">
+                  {editingRoom ? "Update room configuration and live rates" : "Configure a new room type or luxury villa for the resort"}
+                </p>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setIsModalOpen(false)} 
+                className="size-8 rounded-lg flex items-center justify-center text-warm-gray hover:text-charcoal hover:bg-slate-100 transition-colors cursor-pointer"
+              >
                 <X className="size-5" />
               </button>
             </div>
@@ -231,22 +246,22 @@ export default function RoomsManagementPage() {
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-semibold text-charcoal mb-1">Room Name *</label>
+                  <label className="block font-semibold text-charcoal mb-1.5">Room Name *</label>
                   <input
                     type="text"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-border rounded-md bg-background focus:outline-none focus:border-primary"
+                    className="w-full px-3.5 py-2.5 border border-border rounded-lg bg-slate-50/70 focus:bg-white text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                     placeholder="e.g. Deluxe Forest Suite"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-charcoal mb-1">Room Type *</label>
+                  <label className="block font-semibold text-charcoal mb-1.5">Room Type *</label>
                   <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                    className="w-full px-3 py-2 border border-border rounded-md bg-background focus:outline-none focus:border-primary"
+                    className="w-full px-3.5 py-2.5 border border-border rounded-lg bg-slate-50/70 focus:bg-white text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                   >
                     <option value="Deluxe Room">Deluxe Room</option>
                     <option value="Premium Suite">Premium Suite</option>
@@ -259,73 +274,73 @@ export default function RoomsManagementPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-charcoal mb-1">Short Description *</label>
+                <label className="block font-semibold text-charcoal mb-1.5">Short Description *</label>
                 <textarea
                   required
                   rows={2}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3 py-2 border border-border rounded-md bg-background focus:outline-none focus:border-primary"
-                  placeholder="Summary of room features..."
+                  className="w-full px-3.5 py-2.5 border border-border rounded-lg bg-slate-50/70 focus:bg-white text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  placeholder="Summary of room features, ambiance, and view..."
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block font-semibold text-charcoal mb-1">Base Rate (₹) *</label>
+                  <label className="block font-semibold text-charcoal mb-1.5">Base Rate (₹) *</label>
                   <input
                     type="number"
                     required
                     value={formData.basePrice}
                     onChange={(e) => setFormData({ ...formData, basePrice: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-border rounded-md bg-background focus:outline-none focus:border-primary"
+                    className="w-full px-3.5 py-2.5 border border-border rounded-lg bg-slate-50/70 focus:bg-white text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-charcoal mb-1">Weekend Rate (₹)</label>
+                  <label className="block font-semibold text-charcoal mb-1.5">Weekend Rate (₹)</label>
                   <input
                     type="number"
                     value={formData.weekendPrice}
                     onChange={(e) => setFormData({ ...formData, weekendPrice: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-border rounded-md bg-background focus:outline-none focus:border-primary"
+                    className="w-full px-3.5 py-2.5 border border-border rounded-lg bg-slate-50/70 focus:bg-white text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-charcoal mb-1">Size (sq ft)</label>
+                  <label className="block font-semibold text-charcoal mb-1.5">Size (sq ft)</label>
                   <input
                     type="number"
                     value={formData.size}
                     onChange={(e) => setFormData({ ...formData, size: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-border rounded-md bg-background focus:outline-none focus:border-primary"
+                    className="w-full px-3.5 py-2.5 border border-border rounded-lg bg-slate-50/70 focus:bg-white text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block font-semibold text-charcoal mb-1">Max Adults</label>
+                  <label className="block font-semibold text-charcoal mb-1.5">Max Adults</label>
                   <input
                     type="number"
                     value={formData.maxAdults}
                     onChange={(e) => setFormData({ ...formData, maxAdults: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-border rounded-md bg-background focus:outline-none focus:border-primary"
+                    className="w-full px-3.5 py-2.5 border border-border rounded-lg bg-slate-50/70 focus:bg-white text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-charcoal mb-1">Max Children</label>
+                  <label className="block font-semibold text-charcoal mb-1.5">Max Children</label>
                   <input
                     type="number"
                     value={formData.maxChildren}
                     onChange={(e) => setFormData({ ...formData, maxChildren: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-border rounded-md bg-background focus:outline-none focus:border-primary"
+                    className="w-full px-3.5 py-2.5 border border-border rounded-lg bg-slate-50/70 focus:bg-white text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-charcoal mb-1">Status</label>
+                  <label className="block font-semibold text-charcoal mb-1.5">Status</label>
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value as Room["status"] })}
-                    className="w-full px-3 py-2 border border-border rounded-md bg-background focus:outline-none focus:border-primary"
+                    className="w-full px-3.5 py-2.5 border border-border rounded-lg bg-slate-50/70 focus:bg-white text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                   >
                     <option value="available">Available</option>
                     <option value="occupied">Occupied</option>
@@ -336,50 +351,52 @@ export default function RoomsManagementPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-charcoal mb-1">Amenities (comma separated)</label>
+                <label className="block font-semibold text-charcoal mb-1.5">Amenities (comma separated)</label>
                 <input
                   type="text"
                   value={formData.amenities}
                   onChange={(e) => setFormData({ ...formData, amenities: e.target.value })}
-                  className="w-full px-3 py-2 border border-border rounded-md bg-background focus:outline-none focus:border-primary"
+                  className="w-full px-3.5 py-2.5 border border-border rounded-lg bg-slate-50/70 focus:bg-white text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                   placeholder="WiFi, Air Conditioning, Forest View, Private Pool"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-charcoal mb-1">Image URLs (comma separated)</label>
+                <label className="block font-semibold text-charcoal mb-1.5">Image URLs (comma separated)</label>
                 <input
                   type="text"
                   value={formData.images}
                   onChange={(e) => setFormData({ ...formData, images: e.target.value })}
-                  className="w-full px-3 py-2 border border-border rounded-md bg-background focus:outline-none focus:border-primary"
-                  placeholder="https://..."
+                  className="w-full px-3.5 py-2.5 border border-border rounded-lg bg-slate-50/70 focus:bg-white text-xs text-charcoal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  placeholder="https://images.unsplash.com/..."
                 />
               </div>
 
-              <div className="flex items-center gap-2 pt-2">
+              <div className="flex items-center gap-2.5 pt-2">
                 <input
                   type="checkbox"
                   id="featured"
                   checked={formData.featured}
                   onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-                  className="rounded border-border text-primary focus:ring-primary"
+                  className="size-4 rounded border-border text-primary focus:ring-primary cursor-pointer"
                 />
-                <label htmlFor="featured" className="font-semibold text-charcoal">Feature on Homepage</label>
+                <label htmlFor="featured" className="font-semibold text-charcoal cursor-pointer text-xs">
+                  Feature this room on the homepage showcase
+                </label>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
+              <div className="flex items-center justify-end gap-3 pt-5 border-t border-border">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-md border border-border text-warm-gray hover:text-charcoal cursor-pointer"
+                  className="px-4 py-2.5 rounded-lg border border-border text-xs font-semibold text-warm-gray hover:bg-slate-50 hover:text-charcoal transition-all cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="inline-flex items-center gap-1.5 px-5 py-2 rounded-md bg-primary text-white font-semibold hover:bg-primary-dark cursor-pointer disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary-dark shadow-sm hover:shadow transition-all cursor-pointer disabled:opacity-50"
                 >
                   {saving ? <Loader2 className="size-3.5 animate-spin" /> : <Check className="size-3.5" />}
                   {editingRoom ? "Update Room" : "Create Room"}

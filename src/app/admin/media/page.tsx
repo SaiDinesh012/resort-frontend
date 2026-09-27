@@ -302,8 +302,14 @@ export default function MediaLibraryPage() {
 
       {/* Add Media Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-surface rounded-xl border border-border shadow-2xl max-w-md w-full p-6 space-y-4">
+        <div 
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+          onClick={() => setIsAddModalOpen(false)}
+        >
+          <div 
+            className="relative bg-white rounded-2xl border border-border shadow-2xl max-w-md w-full p-6 space-y-4 my-8 z-10"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between border-b border-border pb-3">
               <h2 className="font-serif text-lg font-bold text-charcoal flex items-center gap-2">
                 Upload Media to Cloudinary

@@ -209,8 +209,14 @@ export default function PackagesManagementPage() {
 
       {/* Add/Edit Package Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-surface rounded-xl border border-border shadow-2xl max-w-2xl w-full p-6 space-y-6 my-8">
+        <div 
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div 
+            className="relative bg-white rounded-2xl border border-border shadow-2xl max-w-2xl w-full p-6 sm:p-8 space-y-6 my-8 z-10"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between border-b border-border pb-4">
               <h2 className="font-serif text-xl font-bold text-charcoal">
                 {editingPackage ? "Edit Package Details" : "Create New Package"}

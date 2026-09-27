@@ -215,8 +215,14 @@ export default function ContentManagementPage() {
 
       {/* Add Content Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-surface rounded-xl border border-border shadow-2xl max-w-lg w-full p-6 space-y-4">
+        <div 
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div 
+            className="relative bg-white rounded-2xl border border-border shadow-2xl max-w-lg w-full p-6 space-y-4 my-8 z-10"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between border-b border-border pb-3">
               <h2 className="font-serif text-lg font-bold text-charcoal capitalize">Add New {activeTab === "blog" ? "Blog Article" : activeTab === "faqs" ? "FAQ" : "Attraction"}</h2>
               <button onClick={() => setIsModalOpen(false)} className="text-warm-gray hover:text-charcoal cursor-pointer">

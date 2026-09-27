@@ -7,11 +7,13 @@
   --color-secondary: #D9C3A5;
   --color-accent: #B8945A;
   --color-background: #FAF8F3;
+  --color-surface: #FFFFFF;
   --color-charcoal: #1F2933;
   --color-warm-gray: #6B7280;
   --color-border: #E7E1D7;
   --color-success: #2E7D5B;
   --color-error: #B4534B;
+  --color-warning: #D97706;
 
   --font-serif: "Playfair Display", Georgia, serif;
   --font-sans: "Inter", system-ui, sans-serif;

@@ -164,8 +164,14 @@ export default function SeoManagementPage() {
 
       {/* Edit SEO Modal */}
       {editingPage && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-surface rounded-xl border border-border max-w-lg w-full p-6 shadow-2xl space-y-4">
+        <div 
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+          onClick={() => setEditingPage(null)}
+        >
+          <div 
+            className="relative bg-white rounded-2xl border border-border max-w-lg w-full p-6 shadow-2xl space-y-4 my-8 z-10"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex justify-between items-center border-b border-border pb-3">
               <h2 className="font-serif text-lg font-bold text-charcoal">Edit SEO: {editingPage.page}</h2>
               <button onClick={() => setEditingPage(null)} className="text-warm-gray hover:text-charcoal cursor-pointer">
