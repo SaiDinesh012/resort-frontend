@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
-import { BlogPost, Review, FAQ, Attraction } from "@/lib/models/Content";
-import { mockBlogPosts, mockReviews, mockFAQs, mockAttractions } from "@/data/mock/content";
+import { BlogPost, Review, FAQ, Attraction, Experience } from "@/lib/models/Content";
+import { mockBlogPosts, mockReviews, mockFAQs, mockAttractions, mockExperiences } from "@/data/mock/content";
 
 export async function GET(request: Request) {
   try {
@@ -51,6 +51,17 @@ export async function GET(request: Request) {
       return NextResponse.json(attractions);
     }
 
+    if (type === "experience") {
+      const query: any = {};
+      if (status) query.status = status;
+      let experiences = await Experience.find(query).sort({ order: 1, createdAt: -1 });
+      if (experiences.length === 0 && Object.keys(query).length === 0) {
+        await Experience.insertMany(mockExperiences);
+        experiences = await Experience.find({}).sort({ order: 1, createdAt: -1 });
+      }
+      return NextResponse.json(experiences);
+    }
+
     return NextResponse.json({ error: "Invalid content type" }, { status: 400 });
   } catch (error: any) {
     console.error("Error fetching content:", error);
@@ -88,6 +99,12 @@ export async function POST(request: Request) {
       const id = body.id || `att-${Date.now()}`;
       const newAttraction = await Attraction.create({ ...body, id });
       return NextResponse.json(newAttraction, { status: 201 });
+    }
+
+    if (type === "experience") {
+      const id = body.id || `exp-${Date.now()}`;
+      const newExperience = await Experience.create({ ...body, id });
+      return NextResponse.json(newExperience, { status: 201 });
     }
 
     return NextResponse.json({ error: "Invalid content type" }, { status: 400 });

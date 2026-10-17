@@ -3,17 +3,30 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, User } from "lucide-react";
+import { Menu, X, User, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NAV_LINKS, SITE_NAME } from "@/lib/constants";
+import { useSiteSettings } from "@/context/SettingsContext";
+
+const NAV_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "Rooms", href: "/rooms" },
+  { label: "Packages", href: "/packages" },
+  { label: "Experiences", href: "/resort" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
 
 export function WebsiteHeader() {
+  const { settings } = useSiteSettings();
+  const siteName = settings.siteName || "Royal Grand IN Resorts";
+  const logoUrl = settings.logoUrl;
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => setIsScrolled(window.scrollY > 30);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -23,65 +36,66 @@ export function WebsiteHeader() {
   }, [pathname]);
 
   const isHome = pathname === "/";
-  const isDarkHeaderAtTop = !isScrolled && !isHome;
+  // On homepage — transparent until scrolled; on other pages — always dark
+  const isTransparent = isHome && !isScrolled;
 
   return (
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
-          isScrolled
-            ? "bg-surface/95 backdrop-blur-md border-b border-border shadow-card"
-            : isHome
+          "fixed top-0 left-0 right-0 z-40 transition-all duration-500",
+          isTransparent
             ? "bg-transparent"
-            : "bg-primary-dark border-b border-white/10"
+            : "bg-primary-dark/97 backdrop-blur-md border-b border-white/10 shadow-sm"
         )}
+        role="banner"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-              <div className="size-8 rounded-sm bg-accent flex items-center justify-center font-serif font-bold text-white text-sm">
-                V
-              </div>
-              <div>
-                <span
-                  className={cn(
-                    "font-serif font-bold text-lg leading-none transition-colors",
-                    isScrolled ? "text-charcoal" : "text-white"
-                  )}
-                >
-                  {SITE_NAME}
-                </span>
-                <p
-                  className={cn(
-                    "text-xs leading-none transition-colors hidden sm:block mt-0.5",
-                    isScrolled ? "text-warm-gray" : "text-white/80"
-                  )}
-                >
-                  Western Ghats, Karnataka
-                </p>
-              </div>
+
+            {/* Logo / Brand */}
+            <Link
+              href="/"
+              className="flex items-center gap-3 flex-shrink-0 group"
+              aria-label={`${siteName} — Home`}
+            >
+              {logoUrl ? (
+                <div className="relative h-10 w-auto min-w-[40px] max-w-[160px] flex items-center">
+                  <img
+                    src={logoUrl}
+                    alt={`${siteName} logo`}
+                    className="max-h-10 max-w-full object-contain"
+                    loading="eager"
+                  />
+                </div>
+              ) : (
+                /* Text-only logo when no image uploaded */
+                <div className="flex flex-col leading-none">
+                  <span className="font-serif text-lg font-light text-white tracking-wide leading-none">
+                    Royal Grand IN
+                  </span>
+                  <span className="font-sans text-[9px] font-medium text-accent/80 tracking-[0.25em] uppercase mt-0.5">
+                    RESORTS
+                  </span>
+                </div>
+              )}
             </Link>
 
-            {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center gap-0.5" aria-label="Primary navigation">
               {NAV_LINKS.map((link) => {
                 const isActive = pathname === link.href;
                 return (
                   <Link
-                    key={link.href}
+                    key={`${link.href}-${link.label}`}
                     href={link.href}
                     className={cn(
-                      "px-3.5 py-2 rounded-md text-sm font-semibold transition-colors",
-                      isScrolled
-                        ? isActive
-                          ? "text-primary bg-primary/10 font-bold"
-                          : "text-charcoal/90 hover:text-primary hover:bg-primary/5"
-                        : isActive
-                        ? "text-white bg-white/20 font-bold"
-                        : "text-white/90 hover:text-white hover:bg-white/15"
+                      "px-3.5 py-2 rounded-sm font-sans text-sm font-medium transition-colors",
+                      isActive
+                        ? "text-accent"
+                        : "text-white/75 hover:text-white"
                     )}
+                    aria-current={isActive ? "page" : undefined}
                   >
                     {link.label}
                   </Link>
@@ -89,84 +103,83 @@ export function WebsiteHeader() {
               })}
             </nav>
 
-            {/* Right actions */}
+            {/* Right side actions */}
             <div className="hidden lg:flex items-center gap-4">
               <Link
                 href="/account"
-                className={cn(
-                  "flex items-center gap-1.5 text-sm font-semibold transition-colors",
-                  isScrolled
-                    ? "text-charcoal/90 hover:text-primary"
-                    : "text-white/90 hover:text-white"
-                )}
+                className="flex items-center gap-1.5 font-sans text-sm font-medium text-white/70 hover:text-white transition-colors"
+                aria-label="My Account"
               >
-                <User className="size-4" />
+                <User className="size-4" aria-hidden="true" />
                 <span>My Account</span>
               </Link>
               <Link
                 href="/booking"
-                className={cn(
-                  "px-5 py-2.5 rounded-md text-sm font-bold transition-all shadow-sm",
-                  isScrolled
-                    ? "bg-primary hover:bg-primary-dark text-white"
-                    : "bg-accent hover:bg-accent-dark text-white"
-                )}
+                className="px-5 py-2.5 rounded-sm bg-accent hover:bg-accent-dark text-white font-sans font-semibold text-sm tracking-wide transition-all"
+                aria-label="Book Now"
               >
                 Book Now
               </Link>
             </div>
 
-            {/* Mobile menu button */}
+            {/* Mobile menu toggle */}
             <button
-              className={cn(
-                "lg:hidden p-2 rounded-md transition-colors",
-                isScrolled ? "text-charcoal hover:bg-border/40" : "text-white hover:bg-white/10"
-              )}
+              className="lg:hidden p-2 rounded-sm text-white/80 hover:text-white hover:bg-white/10 transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
+              aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-nav"
             >
-              {isMobileMenuOpen ? <X className="size-6" /> : <Menu className="size-6" />}
+              {isMobileMenuOpen ? <X className="size-6" aria-hidden="true" /> : <Menu className="size-6" aria-hidden="true" />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Drawer */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-30 lg:hidden">
+        <div
+          id="mobile-nav"
+          className="fixed inset-0 z-30 lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile navigation"
+        >
+          {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-charcoal/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-primary-dark/60 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
             aria-hidden="true"
           />
-          <div className="absolute top-16 left-0 right-0 bg-surface border-b border-border shadow-panel animate-slide-up">
-            <nav className="px-4 pt-3 pb-6 space-y-1" aria-label="Mobile navigation">
+          {/* Drawer panel */}
+          <div className="absolute top-16 left-0 right-0 bg-primary-dark border-b border-white/10 shadow-panel animate-slide-up">
+            <nav className="px-4 pt-4 pb-8 space-y-1" aria-label="Mobile navigation">
               {NAV_LINKS.map((link) => (
                 <Link
-                  key={link.href}
+                  key={`mobile-${link.href}-${link.label}`}
                   href={link.href}
                   className={cn(
-                    "block px-4 py-3 rounded-md text-sm font-semibold transition-colors",
+                    "block px-4 py-3.5 rounded-sm font-sans text-sm font-medium transition-colors",
                     pathname === link.href
-                      ? "bg-primary/10 text-primary font-bold"
-                      : "text-charcoal hover:bg-border/40 hover:text-primary"
+                      ? "text-accent bg-white/5"
+                      : "text-white/75 hover:text-white hover:bg-white/5"
                   )}
+                  aria-current={pathname === link.href ? "page" : undefined}
                 >
                   {link.label}
                 </Link>
               ))}
-              <div className="pt-4 border-t border-border space-y-2">
+              <div className="pt-4 border-t border-white/10 space-y-2 mt-2">
                 <Link
                   href="/account"
-                  className="flex items-center gap-2 px-4 py-3 rounded-md text-sm font-semibold text-charcoal hover:bg-border/40 transition-colors"
+                  className="flex items-center gap-2 px-4 py-3.5 rounded-sm font-sans text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 transition-colors"
                 >
-                  <User className="size-4" />
+                  <User className="size-4" aria-hidden="true" />
                   My Account
                 </Link>
                 <Link
                   href="/booking"
-                  className="block w-full text-center px-4 py-3 rounded-md bg-primary hover:bg-primary-dark text-white text-sm font-bold transition-colors"
+                  className="block w-full text-center px-4 py-3.5 rounded-sm bg-accent hover:bg-accent-dark text-white font-sans text-sm font-semibold transition-colors"
                 >
                   Book Now
                 </Link>

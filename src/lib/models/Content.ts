@@ -134,6 +134,43 @@ const AttractionSchema = new Schema<IAttraction>(
   { timestamps: true }
 );
 
+export interface IExperience extends Document {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  category: "wellness" | "dining" | "adventure" | "nature" | "cultural";
+  duration: string;
+  price: number;
+  featured: boolean;
+  status: "active" | "inactive";
+  order: number;
+}
+
+const ExperienceSchema = new Schema<IExperience>(
+  {
+    id: { type: String, required: true, unique: true },
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    image: { type: String, required: true },
+    category: {
+      type: String,
+      enum: ["wellness", "dining", "adventure", "nature", "cultural"],
+      default: "wellness",
+    },
+    duration: { type: String, default: "1-2 hours" },
+    price: { type: Number, default: 0 },
+    featured: { type: Boolean, default: true },
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
+    },
+    order: { type: Number, default: 0 },
+  },
+  { timestamps: true }
+);
+
 export const BlogPost: Model<IBlogPost> =
   mongoose.models.BlogPost || mongoose.model<IBlogPost>("BlogPost", BlogPostSchema);
 
@@ -145,3 +182,6 @@ export const FAQ: Model<IFAQ> =
 
 export const Attraction: Model<IAttraction> =
   mongoose.models.Attraction || mongoose.model<IAttraction>("Attraction", AttractionSchema);
+
+export const Experience: Model<IExperience> =
+  mongoose.models.Experience || mongoose.model<IExperience>("Experience", ExperienceSchema);

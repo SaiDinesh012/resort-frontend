@@ -7,9 +7,9 @@ export default function SeoManagementPage() {
   const [activeTab, setActiveTab] = useState<"pages" | "redirects" | "schema" | "sitemap">("pages");
 
   const seoPages = [
-    { page: "Home Page", url: "/", title: "Vanapriya Resort — Western Ghats Luxury Escape", meta: "Luxury resort in Chikmagalur with private pools and forest views.", status: "Indexed" },
-    { page: "Rooms & Suites", url: "/rooms", title: "Luxury Rooms & Villas in Chikmagalur | Vanapriya", meta: "Explore our deluxe forest rooms, suites, and private villas.", status: "Indexed" },
-    { page: "Holiday Packages", url: "/packages", title: "Resort Packages & Honeymoon Offers | Vanapriya", meta: "Curated 3N/4D packages for couples, nature lovers, and families.", status: "Indexed" },
+    { page: "Home Page", url: "/", title: "Royal Gradin — Western Ghats Luxury Escape", meta: "Luxury resort in Chikmagalur with private pools and forest views.", status: "Indexed" },
+    { page: "Rooms & Suites", url: "/rooms", title: "Luxury Rooms & Villas in Chikmagalur | Royal Gradin", meta: "Explore our deluxe forest rooms, suites, and private villas.", status: "Indexed" },
+    { page: "Holiday Packages", url: "/packages", title: "Resort Packages & Honeymoon Offers | Royal Gradin", meta: "Curated 3N/4D packages for couples, nature lovers, and families.", status: "Indexed" },
   ];
 
   return (
@@ -81,8 +81,8 @@ export default function SeoManagementPage() {
 {`{
   "@context": "https://schema.org",
   "@type": "Resort",
-  "name": "Vanapriya Resort",
-  "image": "https://vanapriya.com/hero.jpg",
+  "name": "Royal Gradin",
+  "image": "https://royalgradin.com/hero.jpg",
   "telephone": "+919876543210",
   "priceRange": "₹8500 - ₹80000"
 }`}

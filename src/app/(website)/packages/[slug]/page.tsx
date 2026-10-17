@@ -7,19 +7,51 @@ import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { formatCurrency } from "@/lib/utils";
 import type { Metadata } from "next";
 
-interface Props { params: { slug: string } }
+import connectDB from "@/lib/mongodb";
+import { Package } from "@/lib/models/Package";
+
+interface Props {
+  params: Promise<{ slug: string }> | { slug: string };
+}
 
 export async function generateStaticParams() {
+  try {
+    await connectDB();
+    const pkgs = await Package.find({}, "slug").lean();
+    if (pkgs && pkgs.length > 0) {
+      return pkgs.map((p: any) => ({ slug: p.slug }));
+    }
+  } catch (e) {
+    // fallback
+  }
   return mockPackages.map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const pkg = mockPackages.find((p) => p.slug === params.slug);
-  return { title: pkg?.name ?? "Package Details", description: pkg?.description };
+async function getPackageBySlug(slug: string) {
+  try {
+    await connectDB();
+    const doc = await Package.findOne({ slug }).lean();
+    if (doc) {
+      return JSON.parse(JSON.stringify(doc));
+    }
+  } catch (err) {
+    console.error("Error querying package by slug:", err);
+  }
+  return mockPackages.find((p) => p.slug === slug) || null;
 }
 
-export default function PackageDetailPage({ params }: Props) {
-  const pkg = mockPackages.find((p) => p.slug === params.slug);
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await Promise.resolve(params);
+  const pkg = await getPackageBySlug(slug);
+  return {
+    title: pkg?.name ? `${pkg.name} | Royal Grand IN Resorts` : "Package Details",
+    description: pkg?.description,
+  };
+}
+
+export default async function PackageDetailPage({ params }: Props) {
+  const { slug } = await Promise.resolve(params);
+  const pkg = await getPackageBySlug(slug);
   if (!pkg) notFound();
 
   return (
@@ -82,7 +114,7 @@ export default function PackageDetailPage({ params }: Props) {
             <div>
               <h2 className="font-serif text-2xl font-semibold text-charcoal mb-5">Day-by-Day Itinerary</h2>
               <div className="space-y-4">
-                {pkg.itinerary.map((day) => (
+                {pkg.itinerary.map((day: any) => (
                   <div key={day.day} className="bg-surface rounded-lg border border-border p-5">
                     <div className="flex items-center gap-3 mb-3">
                       <span className="size-8 rounded-full bg-primary text-white text-sm font-bold flex items-center justify-center flex-shrink-0">
@@ -91,12 +123,12 @@ export default function PackageDetailPage({ params }: Props) {
                       <h3 className="font-sans font-semibold text-charcoal">{day.title}</h3>
                     </div>
                     <ul className="space-y-1.5 ml-11">
-                      {day.activities.map((a) => (
+                      {day.activities.map((a: string) => (
                         <li key={a} className="flex items-start gap-2 text-sm text-warm-gray">
                           <Check className="size-3.5 text-success flex-shrink-0 mt-0.5" /> {a}
                         </li>
                       ))}
-                      {day.meals.map((m) => (
+                      {day.meals.map((m: string) => (
                         <li key={m} className="flex items-start gap-2 text-xs text-accent font-medium">
                           🍽 {m}
                         </li>
@@ -112,7 +144,7 @@ export default function PackageDetailPage({ params }: Props) {
               <div>
                 <h2 className="font-serif text-xl font-semibold text-charcoal mb-4">What's Included</h2>
                 <ul className="space-y-2">
-                  {pkg.whatsIncluded.map((item) => (
+                  {pkg.whatsIncluded.map((item: string) => (
                     <li key={item} className="flex items-start gap-2 text-sm text-charcoal">
                       <Check className="size-4 text-success flex-shrink-0 mt-0.5" /> {item}
                     </li>
@@ -122,7 +154,7 @@ export default function PackageDetailPage({ params }: Props) {
               <div>
                 <h2 className="font-serif text-xl font-semibold text-charcoal mb-4">What's Excluded</h2>
                 <ul className="space-y-2">
-                  {pkg.whatsExcluded.map((item) => (
+                  {pkg.whatsExcluded.map((item: string) => (
                     <li key={item} className="flex items-start gap-2 text-sm text-warm-gray">
                       <XIcon className="size-4 text-error flex-shrink-0 mt-0.5" /> {item}
                     </li>
@@ -136,7 +168,7 @@ export default function PackageDetailPage({ params }: Props) {
               <h2 className="font-sans font-semibold text-charcoal mb-3">Terms & Cancellation</h2>
               <p className="text-sm text-warm-gray mb-3">{pkg.cancellationPolicy}</p>
               <ul className="space-y-1.5">
-                {pkg.terms.map((t) => (
+                {pkg.terms.map((t: string) => (
                   <li key={t} className="text-xs text-warm-gray flex items-start gap-2">
                     <span className="text-accent">•</span> {t}
                   </li>
@@ -157,12 +189,12 @@ export default function PackageDetailPage({ params }: Props) {
               </div>
               <p className="text-3xl font-bold text-charcoal mb-1">{formatCurrency(pkg.price)}</p>
               <p className="text-sm text-warm-gray mb-5">
-                per {pkg.priceType === "per_couple" ? "couple" : pkg.priceType === "per_person" ? "person" : "group"} · includes {pkg.meals.label}
+                per {pkg.priceType === "per_couple" ? "couple" : pkg.priceType === "per_person" ? "person" : "group"} · includes {pkg.meals?.label || "All Meals"}
               </p>
 
               {/* Thumbnail gallery */}
               <div className="grid grid-cols-3 gap-2 mb-5">
-                {pkg.images.slice(0, 3).map((img, i) => (
+                {pkg.images.slice(0, 3).map((img: string, i: number) => (
                   <div key={i} className="aspect-square rounded-md overflow-hidden relative">
                     <Image src={img} alt={`${pkg.name} ${i+1}`} fill className="object-cover" sizes="100px" />
                   </div>

@@ -22,7 +22,8 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { SITE_NAME } from "@/lib/constants";
+import { SITE_NAME, SITE_EMAIL } from "@/lib/constants";
+import { useSiteSettings } from "@/context/SettingsContext";
 
 interface AdminSidebarProps {
   isOpen: boolean;
@@ -55,7 +56,7 @@ const navItems = [
       { label: "Upcoming", href: "/admin/bookings?status=confirmed" },
       { label: "Completed", href: "/admin/bookings?status=completed" },
       { label: "Cancelled", href: "/admin/bookings?status=cancelled" },
-      { label: "Refunds", href: "/admin/refunds" },
+      { label: "Refunds & Cancellations", href: "/admin/bookings?status=cancelled" },
     ],
   },
   {
@@ -64,8 +65,6 @@ const navItems = [
     children: [
       { label: "Room Types", href: "/admin/rooms" },
       { label: "Inventory", href: "/admin/rooms/inventory" },
-      { label: "Rates", href: "/admin/rooms/rates" },
-      { label: "Amenities", href: "/admin/rooms/amenities" },
     ],
   },
   {
@@ -73,33 +72,30 @@ const navItems = [
     icon: "Package",
     children: [
       { label: "Packages", href: "/admin/packages" },
-      { label: "Activities", href: "/admin/packages#activities" },
-      { label: "Meals", href: "/admin/packages#meals" },
+      { label: "Experiences", href: "/admin/content?tab=experiences" },
     ],
   },
   { label: "Customers", href: "/admin/customers", icon: "Users" },
   { label: "Payments", href: "/admin/payments", icon: "CreditCard" },
   { label: "Media Library", href: "/admin/media", icon: "Image" },
-  { label: "Reviews", href: "/admin/reviews", icon: "Star" },
+  { label: "Reviews & Testimonials", href: "/admin/reviews", icon: "Star" },
   {
     label: "Content",
     icon: "FileText",
     children: [
-      { label: "Pages", href: "/admin/content" },
-      { label: "Blog", href: "/admin/content/blog" },
-      { label: "FAQs", href: "/admin/content/faqs" },
-      { label: "Attractions", href: "/admin/content/attractions" },
+      { label: "Experiences", href: "/admin/content?tab=experiences" },
+      { label: "Guest Inquiries", href: "/admin/content?tab=inquiries" },
+      { label: "Blog & Stories", href: "/admin/content?tab=blog" },
+      { label: "FAQs Studio", href: "/admin/content/faqs" },
+      { label: "Nearby Attractions", href: "/admin/content?tab=attractions" },
+      { label: "Legal Policies", href: "/admin/legal" },
     ],
   },
   {
     label: "SEO",
     icon: "Search",
     children: [
-      { label: "SEO Pages", href: "/admin/seo" },
-      { label: "Slugs", href: "/admin/seo/slugs" },
-      { label: "Redirects", href: "/admin/seo/redirects" },
-      { label: "Schema", href: "/admin/seo/schema" },
-      { label: "Sitemap", href: "/admin/seo/sitemap" },
+      { label: "SEO Settings", href: "/admin/seo" },
     ],
   },
   {
@@ -107,6 +103,7 @@ const navItems = [
     icon: "Megaphone",
     children: [
       { label: "Campaigns", href: "/admin/marketing" },
+      { label: "Subscribers & Newsletter", href: "/admin/subscriptions" },
       { label: "Promotions", href: "/admin/marketing?tab=promotions" },
       { label: "Coupons", href: "/admin/marketing?tab=coupons" },
       { label: "UTM", href: "/admin/marketing?tab=utm" },
@@ -126,6 +123,7 @@ const navItems = [
     icon: "Settings",
     children: [
       { label: "Resort Details", href: "/admin/settings" },
+      { label: "Footer & Social Media", href: "/admin/settings?tab=footer" },
       { label: "Email", href: "/admin/settings?tab=email" },
       { label: "Razorpay", href: "/admin/settings?tab=razorpay" },
       { label: "Google Analytics", href: "/admin/settings?tab=ga" },
@@ -136,6 +134,10 @@ const navItems = [
 
 export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const pathname = usePathname();
+  const { settings } = useSiteSettings();
+  const siteName = settings.siteName || SITE_NAME;
+  const logoUrl = settings.logoUrl;
+  const email = settings.email || SITE_EMAIL;
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
     Bookings: true,
     Rooms: true,
@@ -164,12 +166,22 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
         {/* Brand Header */}
         <div className="h-16 px-6 flex items-center justify-between border-b border-white/10 flex-shrink-0">
           <Link href="/admin" className="flex items-center gap-2.5">
-            <div className="size-8 rounded bg-accent flex items-center justify-center font-serif font-bold text-white text-sm">
-              V
-            </div>
+            {logoUrl ? (
+              <div className="relative h-8 w-auto min-w-[32px] max-w-[100px] flex items-center justify-center">
+                <img
+                  src={logoUrl}
+                  alt={siteName}
+                  className="max-h-8 max-w-full object-contain rounded"
+                />
+              </div>
+            ) : (
+              <div className="size-8 rounded bg-accent flex items-center justify-center font-serif font-bold text-white text-sm">
+                {siteName ? siteName.charAt(0).toUpperCase() : "R"}
+              </div>
+            )}
             <div>
               <span className="font-serif font-bold text-base tracking-wide text-white block leading-none">
-                {SITE_NAME}
+                {siteName}
               </span>
               <span className="text-[10px] text-white/50 uppercase tracking-wider font-semibold">
                 Admin Console
@@ -258,7 +270,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
             </div>
             <div>
               <p className="text-xs font-semibold text-white">Admin User</p>
-              <p className="text-[10px] text-white/50">manager@vanapriya.com</p>
+              <p className="text-[10px] text-white/50">{email}</p>
             </div>
           </div>
           <Link href="/" className="text-xs text-accent hover:underline font-medium">

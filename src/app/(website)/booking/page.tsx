@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Check, Calendar, Users, Shield, CreditCard, ChevronRight, ArrowLeft, Loader2 } from "lucide-react";
+import { Check, Calendar, Users, Shield, CreditCard, ChevronRight, ArrowLeft, Loader2, Sparkles } from "lucide-react";
 import { mockRooms } from "@/data/mock/rooms";
 import { mockPackages } from "@/data/mock/packages";
 import { formatCurrency, calculateNights } from "@/lib/utils";
@@ -17,6 +17,7 @@ export default function BookingPage() {
   const [rooms, setRooms] = useState<Room[]>(mockRooms);
   const [packages, setPackages] = useState<Package[]>(mockPackages);
   const [selectedItemSlug, setSelectedItemSlug] = useState<string>("");
+  const [requestedExperience, setRequestedExperience] = useState<string | null>(null);
 
   // Dates
   const today = new Date().toISOString().split("T")[0];
@@ -34,6 +35,9 @@ export default function BookingPage() {
   const [specialRequests, setSpecialRequests] = useState("");
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
+  const [couponMsg, setCouponMsg] = useState("");
+  const [couponError, setCouponError] = useState("");
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
 
   // Payment state
   const [paymentMethod, setPaymentMethod] = useState("card");
@@ -48,19 +52,46 @@ export default function BookingPage() {
           fetch("/api/rooms"),
           fetch("/api/packages"),
         ]);
+        let loadedRooms = mockRooms;
+        let loadedPackages = mockPackages;
+
         if (rRes.status === "fulfilled" && rRes.value.ok) {
           const rData = await rRes.value.json();
           if (Array.isArray(rData) && rData.length > 0) {
+            loadedRooms = rData;
             setRooms(rData);
-            setSelectedItemSlug(rData[0].slug);
-          } else {
-            setSelectedItemSlug(mockRooms[0].slug);
           }
         }
         if (pRes.status === "fulfilled" && pRes.value.ok) {
           const pData = await pRes.value.json();
           if (Array.isArray(pData) && pData.length > 0) {
+            loadedPackages = pData;
             setPackages(pData);
+          }
+        }
+
+        // Parse query params to pre-select item or experience
+        if (typeof window !== "undefined") {
+          const params = new URLSearchParams(window.location.search);
+          const typeParam = params.get("type");
+          const roomParam = params.get("room") || params.get("roomId");
+          const pkgParam = params.get("package") || params.get("packageId");
+          const titleParam = params.get("title");
+
+          if (typeParam === "package" || pkgParam) {
+            setBookingType("package");
+            const targetPkg = loadedPackages.find((p) => p.slug === pkgParam || p.id === pkgParam);
+            setSelectedItemSlug(targetPkg ? targetPkg.slug : loadedPackages[0].slug);
+          } else if (typeParam === "experience" && titleParam) {
+            setRequestedExperience(titleParam);
+            setSpecialRequests((prev) => (prev ? prev : `Selected Resort Experience: ${titleParam}`));
+            setSelectedItemSlug(loadedRooms[0]?.slug || mockRooms[0].slug);
+          } else if (roomParam) {
+            setBookingType("room");
+            const targetRoom = loadedRooms.find((r) => r.slug === roomParam || r.id === roomParam);
+            setSelectedItemSlug(targetRoom ? targetRoom.slug : loadedRooms[0].slug);
+          } else {
+            setSelectedItemSlug(loadedRooms[0]?.slug || mockRooms[0].slug);
           }
         }
       } catch (err) {
@@ -80,13 +111,36 @@ export default function BookingPage() {
   const taxAmount = subtotal * taxRate;
   const grandTotal = Math.max(0, subtotal + taxAmount - discount);
 
-  const handleApplyCoupon = () => {
-    if (couponCode.toUpperCase() === "WELCOME10") {
-      setDiscount(subtotal * 0.1);
-    } else if (couponCode.toUpperCase() === "VANAPRIYA") {
-      setDiscount(5000);
-    } else {
-      alert("Invalid coupon code. Try WELCOME10 or VANAPRIYA");
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    try {
+      setApplyingCoupon(true);
+      setCouponMsg("");
+      setCouponError("");
+      const res = await fetch(
+        `/api/coupons?validate=${encodeURIComponent(couponCode.trim())}&amount=${subtotal}`
+      );
+      const data = await res.json();
+      if (res.ok && data.valid) {
+        setDiscount(data.discountAmount);
+        setCouponMsg(data.message || `Coupon applied! -${formatCurrency(data.discountAmount)}`);
+      } else {
+        setDiscount(0);
+        setCouponError(data.error || "Invalid coupon code.");
+      }
+    } catch (err) {
+      if (couponCode.toUpperCase() === "WELCOME10") {
+        const disc = Math.min(subtotal * 0.1, 3000);
+        setDiscount(disc);
+        setCouponMsg(`Coupon applied! -${formatCurrency(disc)}`);
+      } else if (couponCode.toUpperCase() === "ROYALGRAND") {
+        setDiscount(5000);
+        setCouponMsg("Coupon applied! -₹5,000");
+      } else {
+        setCouponError("Unable to validate coupon code.");
+      }
+    } finally {
+      setApplyingCoupon(false);
     }
   };
 
@@ -136,14 +190,18 @@ export default function BookingPage() {
       if (res.ok && data.bookingNumber) {
         setConfirmedBookingNum(data.bookingNumber);
       } else {
-        setConfirmedBookingNum(`VP-${Math.floor(100000 + Math.random() * 900000)}`);
+        setConfirmedBookingNum(`RG-${Math.floor(100000 + Math.random() * 900000)}`);
+      }
+
+      if (typeof window !== "undefined" && payload.guestDetails?.email) {
+        localStorage.setItem("resort_guest_email", payload.guestDetails.email);
       }
 
       setBookingConfirmed(true);
       setStep(6);
     } catch (err) {
       console.error("Booking error:", err);
-      setConfirmedBookingNum(`VP-${Math.floor(100000 + Math.random() * 900000)}`);
+      setConfirmedBookingNum(`RG-${Math.floor(100000 + Math.random() * 900000)}`);
       setBookingConfirmed(true);
       setStep(6);
     } finally {
@@ -200,6 +258,34 @@ export default function BookingPage() {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Experience Reservation Banner */}
+        {requestedExperience && !bookingConfirmed && (
+          <div className="mb-6 p-4 rounded-xl bg-accent/10 border border-accent/30 text-charcoal flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-xs">
+            <div className="flex items-center gap-3">
+              <div className="size-8 rounded-full bg-accent/20 flex items-center justify-center text-accent shrink-0">
+                <Sparkles className="size-4" />
+              </div>
+              <div>
+                <p className="font-semibold text-charcoal text-sm">
+                  Experience Add-On: <span className="text-primary font-bold">{requestedExperience}</span>
+                </p>
+                <p className="text-warm-gray text-xs">
+                  Your curated experience will be reserved alongside your villa or suite booking.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                setRequestedExperience(null);
+                setSpecialRequests("");
+              }}
+              className="text-xs text-warm-gray hover:text-rose-600 font-semibold cursor-pointer underline self-end sm:self-center"
+            >
+              Remove Experience
+            </button>
           </div>
         )}
 
@@ -499,20 +585,32 @@ export default function BookingPage() {
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="Enter Coupon Code (try WELCOME10)"
+                    placeholder="Enter Coupon Code (e.g. WELCOME10, ROYALGRAND)"
                     value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value)}
-                    className="flex-1 px-4 py-2.5 rounded-md border border-border text-sm bg-background uppercase focus:outline-none"
+                    onChange={(e) => {
+                      setCouponCode(e.target.value.toUpperCase());
+                      if (couponError) setCouponError("");
+                    }}
+                    disabled={applyingCoupon}
+                    className="flex-1 px-4 py-2.5 rounded-md border border-border text-sm bg-background font-mono font-bold uppercase focus:outline-none"
                   />
                   <button
                     onClick={handleApplyCoupon}
-                    className="px-4 py-2.5 rounded-md bg-accent text-white text-sm font-semibold hover:bg-accent-dark transition-colors cursor-pointer"
+                    disabled={applyingCoupon || !couponCode.trim()}
+                    className="px-5 py-2.5 rounded-md bg-accent text-white text-sm font-semibold hover:bg-accent-dark transition-colors cursor-pointer disabled:opacity-50"
                   >
-                    Apply
+                    {applyingCoupon ? "Applying..." : "Apply"}
                   </button>
                 </div>
-                {discount > 0 && (
-                  <p className="text-xs text-emerald-600 font-medium">Coupon applied! Discount: -{formatCurrency(discount)}</p>
+                {couponMsg && (
+                  <p className="text-xs text-emerald-600 font-medium flex items-center gap-1">
+                    ✓ {couponMsg}
+                  </p>
+                )}
+                {couponError && (
+                  <p className="text-xs text-rose-600 font-medium">
+                    ✕ {couponError}
+                  </p>
                 )}
 
                 <div className="pt-4 flex justify-between">
@@ -590,11 +688,11 @@ export default function BookingPage() {
                 <h2 className="font-serif text-3xl font-bold text-charcoal">Booking Confirmed!</h2>
                 <p className="text-warm-gray text-sm max-w-md mx-auto">
                   Thank you, <span className="font-semibold text-charcoal">{firstName || "Guest"}</span>. Your booking reference number is{" "}
-                  <span className="font-mono text-primary font-bold">{confirmedBookingNum || "VP-889912"}</span>.
+                  <span className="font-mono text-primary font-bold">{confirmedBookingNum || "RG-889912"}</span>.
                 </p>
 
                 <div className="p-4 bg-background rounded-lg border border-border max-w-md mx-auto text-left text-xs space-y-2 text-warm-gray">
-                  <div className="flex justify-between"><span className="font-medium text-charcoal">Resort:</span> <span>Vanapriya Resort, Western Ghats</span></div>
+                  <div className="flex justify-between"><span className="font-medium text-charcoal">Resort:</span> <span>Royal Gradin, Western Ghats</span></div>
                   <div className="flex justify-between"><span className="font-medium text-charcoal">Item:</span> <span>{bookingType === "room" ? selectedRoom?.name : selectedPackage?.name}</span></div>
                   <div className="flex justify-between"><span className="font-medium text-charcoal">Check-in:</span> <span>{checkIn}</span></div>
                   <div className="flex justify-between"><span className="font-medium text-charcoal">Check-out:</span> <span>{checkOut}</span></div>

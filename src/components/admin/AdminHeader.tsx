@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, Bell, Search, Globe, ChevronDown, User, LogOut, Settings } from "lucide-react";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { useSiteSettings } from "@/context/SettingsContext";
+import { SITE_EMAIL } from "@/lib/constants";
 
 interface AdminHeaderProps {
   onToggleSidebar: () => void;
@@ -12,6 +14,7 @@ interface AdminHeaderProps {
 }
 
 export function AdminHeader({ onToggleSidebar, title, breadcrumbs = [] }: AdminHeaderProps) {
+  const { settings } = useSiteSettings();
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
@@ -98,7 +101,7 @@ export function AdminHeader({ onToggleSidebar, title, breadcrumbs = [] }: AdminH
             <div className="absolute right-0 mt-2 w-48 bg-surface rounded-lg border border-border shadow-panel p-1 z-50 animate-slide-up">
               <div className="px-3 py-2 border-b border-border">
                 <p className="text-xs font-semibold text-charcoal">Resort Manager</p>
-                <p className="text-[10px] text-warm-gray">manager@vanapriya.com</p>
+                <p className="text-[10px] text-warm-gray">{settings.email || SITE_EMAIL}</p>
               </div>
               <Link href="/admin/settings" className="flex items-center gap-2 px-3 py-2 text-xs text-charcoal hover:bg-background rounded-md">
                 <Settings className="size-3.5 text-warm-gray" /> Settings

@@ -1,19 +1,45 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #1F4D3A;
-  --color-primary-dark: #163A2C;
-  --color-primary-light: #2A6B50;
-  --color-secondary: #D9C3A5;
-  --color-accent: #B8945A;
-  --color-background: #FAF8F3;
-  --color-charcoal: #1F2933;
-  --color-warm-gray: #6B7280;
-  --color-border: #E7E1D7;
+  /* ─── Deep Forest Green Palette ───────────────────────────── */
+  --color-primary: #17382F;
+  --color-primary-dark: #0E2922;
+  --color-primary-light: #1F4D3A;
+
+  /* ─── Muted Beige / Secondary ─────────────────────────────── */
+  --color-secondary: #DDD6C7;
+  --color-secondary-dark: #C8BEA8;
+  --color-secondary-light: #EDE8DF;
+
+  /* ─── Antique Gold — Restrained Accent ───────────────────── */
+  --color-accent: #B69A62;
+  --color-accent-dark: #9A8048;
+  --color-accent-light: #CAB07A;
+
+  /* ─── Sage — Secondary UI Color ──────────────────────────── */
+  --color-sage: #6F8275;
+  --color-sage-light: #8FA097;
+  --color-sage-dark: #556462;
+
+  /* ─── Backgrounds ─────────────────────────────────────────── */
+  --color-background: #F7F5EF;
+  --color-surface: #FCFBF7;
+  --color-ivory: #F7F5EF;
+  --color-warm-white: #FCFBF7;
+  --color-beige: #DDD6C7;
+
+  /* ─── Text ────────────────────────────────────────────────── */
+  --color-charcoal: #1E2823;
+  --color-warm-gray: #69736C;
+
+  /* ─── UI ──────────────────────────────────────────────────── */
+  --color-border: #D8D5CC;
   --color-success: #2E7D5B;
   --color-error: #B4534B;
+  --color-warning: #C97B2D;
 
-  --font-serif: "Playfair Display", Georgia, serif;
+  /* ─── Typography ──────────────────────────────────────────── */
+  --font-serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
   --font-sans: "Inter", system-ui, sans-serif;
 }
 
@@ -23,26 +49,32 @@
   }
 
   body {
-    background-color: #FAF8F3;
-    color: #1F2933;
+    background-color: #F7F5EF;
+    color: #1E2823;
     font-family: "Inter", system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
     font-weight: 600;
-    letter-spacing: -0.02em;
-    color: #1F2933;
+    letter-spacing: -0.01em;
+    color: #1E2823;
+    line-height: 1.2;
   }
 
   * {
-    border-color: #E7E1D7;
+    border-color: #D8D5CC;
   }
 
   input, textarea, select {
     font-family: "Inter", system-ui, sans-serif;
+  }
+
+  /* Smooth link transitions */
+  a {
+    transition: color 0.2s ease, opacity 0.2s ease;
   }
 }
 
@@ -60,16 +92,60 @@
     display: none;
   }
 
+  /* Skeleton loading shimmer */
   .skeleton {
-    background: linear-gradient(90deg, #f0ede8 25%, #e8e3db 50%, #f0ede8 75%);
+    background: linear-gradient(
+      90deg,
+      #ece9e2 25%,
+      #e4e0d8 50%,
+      #ece9e2 75%
+    );
     background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
+    animation: shimmer 1.8s infinite;
+  }
+
+  /* Editorial section divider */
+  .section-divider {
+    width: 40px;
+    height: 1px;
+    background-color: #B69A62;
+    margin: 0 auto;
+  }
+
+  /* Subtle gold underline for headings */
+  .heading-accent::after {
+    content: "";
+    display: block;
+    width: 36px;
+    height: 1px;
+    background-color: #B69A62;
+    margin-top: 12px;
+  }
+
+  /* Slow hero image zoom animation */
+  .animate-slow-zoom {
+    animation: slowZoom 10s ease-out forwards;
+  }
+
+  /* Fade up on scroll */
+  .animate-fade-up {
+    animation: fadeUp 0.7s ease-out both;
   }
 }
 
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+@keyframes slowZoom {
+  0% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(28px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 /* Custom scrollbar for admin sidebar */
@@ -80,6 +156,9 @@
   background: transparent;
 }
 .admin-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.15);
   border-radius: 4px;
+}
+.admin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.3);
 }

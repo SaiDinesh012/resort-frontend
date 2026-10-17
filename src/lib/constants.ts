@@ -1,10 +1,10 @@
-export const SITE_NAME = "Vanapriya Resort";
-export const SITE_TAGLINE = "Where Wilderness Meets Luxury";
+export const SITE_NAME = "Royal Grand IN Resorts";
+export const SITE_TAGLINE = "Stay Once, Carry Memories Forever";
 export const SITE_DESCRIPTION =
-  "Nestled in the heart of the Western Ghats, Vanapriya Resort offers an unparalleled luxury escape surrounded by pristine forests, cascading waterfalls, and breathtaking mountain vistas.";
+  "Nestled amidst the lush forests and serene landscapes of Maredumilli, Royal Grand IN Resorts offers an unparalleled luxury escape where royalty meets the wild.";
 export const SITE_PHONE = "+91 98765 43210";
-export const SITE_EMAIL = "reservations@vanapriya.com";
-export const SITE_ADDRESS = "Survey No. 45, Chikmagalur-Koppa Road, Balaehonnur, Karnataka 577111, India";
+export const SITE_EMAIL = "reservations@royalgrandin.com";
+export const SITE_ADDRESS = "Maredumilli, East Godavari District, Andhra Pradesh 533288, India";
 
 export const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -61,6 +61,7 @@ export const ADMIN_NAV = [
     icon: "FileText",
     children: [
       { label: "Pages", href: "/admin/content" },
+      { label: "Legal Policies", href: "/admin/legal" },
       { label: "Blog", href: "/admin/content/blog" },
       { label: "FAQs", href: "/admin/content/faqs" },
       { label: "Attractions", href: "/admin/content/attractions" },

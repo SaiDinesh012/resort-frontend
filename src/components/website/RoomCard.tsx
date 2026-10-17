@@ -17,20 +17,21 @@ const amenityIcons: Record<string, React.ReactNode> = {
 };
 
 export function RoomCard({ room, className, compact = false }: RoomCardProps) {
+  const fallbackImage = "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80";
   return (
     <article
       className={cn(
-        "group bg-surface rounded-lg overflow-hidden border border-border hover:border-secondary transition-all duration-300 hover:shadow-card-hover",
+        "group bg-surface rounded-sm overflow-hidden border border-border hover:border-sage/50 transition-all duration-400 hover:shadow-card-hover",
         className
       )}
     >
       {/* Image */}
       <div className="relative overflow-hidden aspect-[4/3]">
         <Image
-          src={room.images[0]}
-          alt={room.name}
+          src={room.images?.[0] || fallbackImage}
+          alt={`${room.name} — Royal Grand IN Resorts`}
           fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
+          className="object-cover group-hover:scale-[1.03] transition-transform duration-700"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         {/* Availability chip */}
@@ -71,7 +72,7 @@ export function RoomCard({ room, className, compact = false }: RoomCardProps) {
         </div>
 
         {/* Title */}
-        <h3 className="font-serif text-lg font-semibold text-charcoal mb-2 group-hover:text-primary transition-colors">
+        <h3 className="font-serif text-xl font-light text-charcoal mb-2 group-hover:text-primary transition-colors leading-tight">
           {room.name}
         </h3>
 
@@ -117,13 +118,13 @@ export function RoomCard({ room, className, compact = false }: RoomCardProps) {
         <div className="flex gap-2">
           <Link
             href={`/rooms/${room.slug}`}
-            className="flex-1 text-center py-2.5 rounded-md border border-primary text-primary text-sm font-medium hover:bg-primary hover:text-white transition-colors"
+            className="flex-1 text-center py-2.5 rounded-sm border border-primary text-primary font-sans text-sm font-medium hover:bg-primary hover:text-white transition-colors"
           >
             View Details
           </Link>
           <Link
             href={`/booking?room=${room.slug}`}
-            className="flex-1 text-center py-2.5 rounded-md bg-primary hover:bg-primary-dark text-white text-sm font-medium transition-colors"
+            className="flex-1 text-center py-2.5 rounded-sm bg-primary hover:bg-primary-dark text-white font-sans text-sm font-medium transition-colors"
           >
             Book Now
           </Link>

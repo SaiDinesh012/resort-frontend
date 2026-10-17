@@ -10,28 +10,86 @@ import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { formatCurrency } from "@/lib/utils";
 import type { Metadata } from "next";
 
+import connectDB from "@/lib/mongodb";
+import { Room } from "@/lib/models/Room";
+import { Review } from "@/lib/models/Content";
+
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }> | { slug: string };
 }
 
 export async function generateStaticParams() {
+  try {
+    await connectDB();
+    const rooms = await Room.find({}, "slug").lean();
+    if (rooms && rooms.length > 0) {
+      return rooms.map((r: any) => ({ slug: r.slug }));
+    }
+  } catch (e) {
+    // fallback
+  }
   return mockRooms.map((r) => ({ slug: r.slug }));
 }
 
+async function getRoomBySlug(slug: string) {
+  try {
+    await connectDB();
+    const doc = await Room.findOne({ slug }).lean();
+    if (doc) {
+      return JSON.parse(JSON.stringify(doc));
+    }
+  } catch (err) {
+    console.error("Error querying room by slug:", err);
+  }
+  return mockRooms.find((r) => r.slug === slug) || null;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const room = mockRooms.find((r) => r.slug === params.slug);
+  const { slug } = await Promise.resolve(params);
+  const room = await getRoomBySlug(slug);
   return {
-    title: room?.name ?? "Room Details",
+    title: room?.name ? `${room.name} | Royal Grand IN Resorts` : "Room Details",
     description: room?.description,
   };
 }
 
-export default function RoomDetailPage({ params }: Props) {
-  const room = mockRooms.find((r) => r.slug === params.slug);
+export default async function RoomDetailPage({ params }: Props) {
+  const { slug } = await Promise.resolve(params);
+  const room = await getRoomBySlug(slug);
   if (!room) notFound();
 
-  const roomReviews = mockReviews.filter((r) => r.roomId === room.id);
-  const similarRooms = mockRooms.filter((r) => r.id !== room.id && r.type !== room.type).slice(0, 3);
+  // Load reviews from DB with fallback
+  let roomReviews: any[] = [];
+  try {
+    await connectDB();
+    const dbReviews = await Review.find({
+      $or: [{ roomId: room.id }, { roomId: (room as any)._id?.toString() }],
+      status: "published",
+    }).lean();
+    if (dbReviews && dbReviews.length > 0) {
+      roomReviews = JSON.parse(JSON.stringify(dbReviews));
+    }
+  } catch (e) {
+    // fallback
+  }
+  if (roomReviews.length === 0) {
+    roomReviews = mockReviews.filter((r) => r.roomId === room.id);
+  }
+
+  // Load similar rooms
+  let similarRooms: any[] = [];
+  try {
+    await connectDB();
+    const dbSimilar = await Room.find({ slug: { $ne: room.slug } }).limit(3).lean();
+    if (dbSimilar && dbSimilar.length > 0) {
+      similarRooms = JSON.parse(JSON.stringify(dbSimilar));
+    }
+  } catch (e) {
+    // fallback
+  }
+  if (similarRooms.length === 0) {
+    similarRooms = mockRooms.filter((r) => r.id !== room.id && r.type !== room.type).slice(0, 3);
+  }
 
   return (
     <div className="bg-background">
@@ -58,7 +116,7 @@ export default function RoomDetailPage({ params }: Props) {
           </div>
           {/* Thumbnails */}
           <div className="hidden md:grid col-span-2 grid-cols-2 gap-3">
-            {room.images.slice(1, 5).map((img, i) => (
+            {room.images.slice(1, 5).map((img: string, i: number) => (
               <div key={i} className="relative aspect-square rounded-lg overflow-hidden">
                 <Image src={img} alt={`${room.name} view ${i + 2}`} fill className="object-cover" sizes="25vw" />
               </div>
@@ -116,7 +174,7 @@ export default function RoomDetailPage({ params }: Props) {
             <div className="mb-8">
               <h2 className="font-serif text-xl font-semibold text-charcoal mb-4">Amenities</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {room.amenities.map((a) => (
+                {room.amenities.map((a: string) => (
                   <div key={a} className="flex items-center gap-2 text-sm text-charcoal">
                     <Check className="size-4 text-success flex-shrink-0" />
                     {a}

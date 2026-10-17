@@ -69,6 +69,19 @@ export interface Attraction {
   image?: string;
 }
 
+export interface Experience {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  category?: "wellness" | "dining" | "adventure" | "nature" | "cultural";
+  duration?: string;
+  price?: number;
+  featured?: boolean;
+  status?: "active" | "inactive";
+  order?: number;
+}
+
 export interface AnalyticsData {
   period: string;
   visitors: number;

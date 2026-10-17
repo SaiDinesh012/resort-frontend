@@ -12,10 +12,24 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
     const type = searchParams.get("type");
+    const email = searchParams.get("email");
+    const search = searchParams.get("search");
 
     const query: any = {};
     if (status && status !== "all") query.bookingStatus = status;
     if (type) query.type = type;
+    if (email) {
+      query["guestDetails.email"] = { $regex: new RegExp(`^${email.trim()}$`, "i") };
+    }
+    if (search) {
+      query.$or = [
+        { bookingNumber: { $regex: search.trim(), $options: "i" } },
+        { "guestDetails.firstName": { $regex: search.trim(), $options: "i" } },
+        { "guestDetails.lastName": { $regex: search.trim(), $options: "i" } },
+        { "guestDetails.email": { $regex: search.trim(), $options: "i" } },
+        { "guestDetails.phone": { $regex: search.trim(), $options: "i" } },
+      ];
+    }
 
     let bookings = await Booking.find(query).sort({ createdAt: -1 });
 
@@ -37,7 +51,7 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     const bookingId = `book-${Date.now()}`;
-    const bookingNumber = `VP-${Math.floor(100000 + Math.random() * 900000)}`;
+    const bookingNumber = `RG-${Math.floor(100000 + Math.random() * 900000)}`;
 
     const newBooking = await Booking.create({
       id: bookingId,
@@ -57,7 +71,7 @@ export async function POST(request: Request) {
       paymentStatus: body.paymentStatus || "paid",
       paymentMethod: body.paymentMethod || "card",
       bookingStatus: "confirmed",
-      notes: body.notes || "Booked online via Vanapriya Resort Website",
+      notes: body.notes || "Booked online via Royal Gradin Website",
       timeline: [
         {
           timestamp: new Date().toISOString(),
