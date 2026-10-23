@@ -1,4 +1,12 @@
+import dns from "dns";
 import mongoose from "mongoose";
+
+// Fix querySrv ECONNREFUSED on local networks/Windows where default DNS refuses SRV queries
+try {
+  dns.setServers(["8.8.8.8", "1.1.1.1"]);
+} catch (err) {
+  // Ignore in environments where setServers is restricted
+}
 
 const MONGODB_URI =
   process.env.MONGODB_URI ||

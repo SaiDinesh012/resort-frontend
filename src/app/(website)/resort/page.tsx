@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
@@ -19,19 +20,41 @@ import {
 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 
-const CATEGORIES = [
-  { label: "All Experiences", value: "all" },
-  { label: "Wellness & Spa", value: "wellness" },
-  { label: "Forest Dining", value: "dining" },
-  { label: "Adventures & Treks", value: "adventure" },
-  { label: "Nature & Night Skies", value: "nature" },
-  { label: "Culture & Plantations", value: "cultural" },
-];
+// Known category label mapping with fallback to auto-title-case
+const CATEGORY_LABEL_MAP: Record<string, string> = {
+  wellness: "Wellness & Spa",
+  dining: "Forest Dining",
+  adventure: "Adventures & Treks",
+  nature: "Nature & Night Skies",
+  cultural: "Culture & Plantations",
+  safari: "Jungle Safari",
+  water: "Water & River Life",
+  family: "Family & Kids",
+};
 
-export default function ResortExperiencesPage() {
+function formatCategoryLabel(cat: string): string {
+  const normalized = cat.toLowerCase().trim();
+  if (CATEGORY_LABEL_MAP[normalized]) {
+    return CATEGORY_LABEL_MAP[normalized];
+  }
+  return cat
+    .replace(/[-_]/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function ResortExperiencesContent() {
+  const searchParams = useSearchParams();
+  const urlCategory = searchParams.get("category");
+
   const [experiences, setExperiences] = useState<Experience[]>(mockExperiences);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>(urlCategory || "all");
+
+  useEffect(() => {
+    if (urlCategory) {
+      setSelectedCategory(urlCategory);
+    }
+  }, [urlCategory]);
 
   useEffect(() => {
     async function fetchExperiences() {
@@ -53,20 +76,35 @@ export default function ResortExperiencesPage() {
     fetchExperiences();
   }, []);
 
+  // Dynamically derive tabs from whichever categories exist in the active data
+  const dynamicCategories = useMemo(() => {
+    const uniqueCategories = Array.from(
+      new Set(experiences.map((exp) => exp.category).filter(Boolean))
+    );
+
+    return [
+      {
+        label: "All Experiences",
+        value: "all",
+        count: experiences.length,
+      },
+      ...uniqueCategories.map((cat) => ({
+        label: formatCategoryLabel(cat),
+        value: cat,
+        count: experiences.filter((e) => e.category === cat).length,
+      })),
+    ];
+  }, [experiences]);
+
   const filtered = experiences.filter((exp) => {
     if (selectedCategory === "all") return true;
-    return exp.category === selectedCategory;
+    return exp.category?.toLowerCase() === selectedCategory.toLowerCase();
   });
-
-  const getCategoryCount = (val: string) => {
-    if (val === "all") return experiences.length;
-    return experiences.filter((e) => e.category === val).length;
-  };
 
   return (
     <div className="bg-background min-h-screen">
       {/* ══════════════════════════════════════════════════════
-          PAGE HEADER — Deep Forest Green with Antique Gold Accent
+          PAGE HEADER — Deep Royal Navy with Royal Gold Accent
       ══════════════════════════════════════════════════════ */}
       <div className="bg-primary-dark text-white pt-28 pb-16 border-b border-white/[0.08]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -93,14 +131,14 @@ export default function ResortExperiencesPage() {
       </div>
 
       {/* ══════════════════════════════════════════════════════
-          CATEGORY FILTER STRIP
+          CATEGORY FILTER STRIP (Fully Dynamic)
       ══════════════════════════════════════════════════════ */}
       <div className="bg-surface border-b border-border sticky top-16 lg:top-20 z-30 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 overflow-x-auto scrollbar-none">
           <div className="flex items-center gap-2 min-w-max">
-            {CATEGORIES.map((cat) => {
-              const active = selectedCategory === cat.value;
-              const count = getCategoryCount(cat.value);
+            {dynamicCategories.map((cat) => {
+              const active = selectedCategory.toLowerCase() === cat.value.toLowerCase();
+              const count = cat.count;
               return (
                 <button
                   key={cat.value}
@@ -113,8 +151,8 @@ export default function ResortExperiencesPage() {
                 >
                   <span>{cat.label}</span>
                   <span
-                    className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-                      active ? "bg-white/20 text-white" : "bg-charcoal/10 text-warm-gray"
+                    className={`px-1.5 py-0.5 rounded-full text-[10px] font-medium ${
+                      active ? "bg-accent text-primary-dark font-bold" : "bg-charcoal/10 text-warm-gray"
                     }`}
                   >
                     {count}
@@ -286,5 +324,19 @@ export default function ResortExperiencesPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function ResortExperiencesPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <Loader2 className="size-8 animate-spin text-primary" />
+        </div>
+      }
+    >
+      <ResortExperiencesContent />
+    </Suspense>
   );
 }

@@ -1,42 +1,42 @@
 @import "tailwindcss";
 
 @theme {
-  /* ─── Deep Forest Green Palette ───────────────────────────── */
-  --color-primary: #17382F;
-  --color-primary-dark: #0E2922;
-  --color-primary-light: #1F4D3A;
+  /* ─── Royal Blue Brand Palette (#011D7E) ─────────────────── */
+  --color-primary: #011D7E;
+  --color-primary-dark: #00114D;
+  --color-primary-light: #0D2F9E;
 
-  /* ─── Muted Beige / Secondary ─────────────────────────────── */
-  --color-secondary: #DDD6C7;
-  --color-secondary-dark: #C8BEA8;
-  --color-secondary-light: #EDE8DF;
+  /* ─── Champagne Cream / Secondary ─────────────────────────── */
+  --color-secondary: #F1EDE2;
+  --color-secondary-dark: #E2D9C4;
+  --color-secondary-light: #F9F7F1;
 
-  /* ─── Antique Gold — Restrained Accent ───────────────────── */
-  --color-accent: #B69A62;
-  --color-accent-dark: #9A8048;
-  --color-accent-light: #CAB07A;
+  /* ─── Royal Gold (#E4C950) ─────────────────────────────────── */
+  --color-accent: #E4C950;
+  --color-accent-dark: #C5A51E;
+  --color-accent-light: #F3E17E;
 
-  /* ─── Sage — Secondary UI Color ──────────────────────────── */
-  --color-sage: #6F8275;
-  --color-sage-light: #8FA097;
-  --color-sage-dark: #556462;
+  /* ─── Royal Slate — Secondary UI Color ────────────────────── */
+  --color-sage: #546E8A;
+  --color-sage-light: #7A94B0;
+  --color-sage-dark: #384E66;
 
   /* ─── Backgrounds ─────────────────────────────────────────── */
-  --color-background: #F7F5EF;
-  --color-surface: #FCFBF7;
-  --color-ivory: #F7F5EF;
-  --color-warm-white: #FCFBF7;
-  --color-beige: #DDD6C7;
+  --color-background: #F8F9FD;
+  --color-surface: #FFFFFF;
+  --color-ivory: #F8F9FD;
+  --color-warm-white: #FFFFFF;
+  --color-beige: #F1EDE2;
 
   /* ─── Text ────────────────────────────────────────────────── */
-  --color-charcoal: #1E2823;
-  --color-warm-gray: #69736C;
+  --color-charcoal: #0B132B;
+  --color-warm-gray: #5A6578;
 
   /* ─── UI ──────────────────────────────────────────────────── */
-  --color-border: #D8D5CC;
-  --color-success: #2E7D5B;
-  --color-error: #B4534B;
-  --color-warning: #C97B2D;
+  --color-border: #E2E6EE;
+  --color-success: #1E8E5A;
+  --color-error: #D13838;
+  --color-warning: #D9822B;
 
   /* ─── Typography ──────────────────────────────────────────── */
   --font-serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
@@ -49,8 +49,8 @@
   }
 
   body {
-    background-color: #F7F5EF;
-    color: #1E2823;
+    background-color: #F8F9FD;
+    color: #0B132B;
     font-family: "Inter", system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -60,12 +60,12 @@
     font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
     font-weight: 600;
     letter-spacing: -0.01em;
-    color: #1E2823;
+    color: #0B132B;
     line-height: 1.2;
   }
 
   * {
-    border-color: #D8D5CC;
+    border-color: #E2E6EE;
   }
 
   input, textarea, select {
@@ -96,9 +96,9 @@
   .skeleton {
     background: linear-gradient(
       90deg,
-      #ece9e2 25%,
-      #e4e0d8 50%,
-      #ece9e2 75%
+      #edf0f7 25%,
+      #e2e6f0 50%,
+      #edf0f7 75%
     );
     background-size: 200% 100%;
     animation: shimmer 1.8s infinite;
@@ -108,7 +108,7 @@
   .section-divider {
     width: 40px;
     height: 1px;
-    background-color: #B69A62;
+    background-color: #E4C950;
     margin: 0 auto;
   }
 
@@ -118,7 +118,7 @@
     display: block;
     width: 36px;
     height: 1px;
-    background-color: #B69A62;
+    background-color: #E4C950;
     margin-top: 12px;
   }
 

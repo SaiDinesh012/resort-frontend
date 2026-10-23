@@ -73,6 +73,12 @@ function RoomsContent() {
     fetchRooms();
   }, [checkInParam, checkOutParam, adultsParam, childrenParam]);
 
+  // Dynamically derive room types from active rooms in database
+  const availableTypes = useMemo(() => {
+    const fromRooms = Array.from(new Set(rooms.map((r) => r.type).filter(Boolean)));
+    return fromRooms.length > 0 ? fromRooms : ROOM_TYPES;
+  }, [rooms]);
+
   const filtered = rooms.filter((r) => {
     if (selectedType && r.type !== selectedType) return false;
     if (r.basePrice > maxPrice) return false;
@@ -170,24 +176,30 @@ function RoomsContent() {
                       All Accommodations
                     </span>
                   </label>
-                  {ROOM_TYPES.map((t) => (
-                    <label
-                      key={t}
-                      onClick={() => setSelectedType(t)}
-                      className="flex items-center gap-3 cursor-pointer group"
-                    >
-                      <input
-                        type="radio"
-                        name="roomType"
-                        checked={selectedType === t}
-                        onChange={() => setSelectedType(t)}
-                        className="size-4 text-primary focus:ring-primary border-border"
-                      />
-                      <span className="font-sans text-sm text-charcoal group-hover:text-primary transition-colors">
-                        {t}
-                      </span>
-                    </label>
-                  ))}
+                  {availableTypes.map((t) => {
+                    const count = rooms.filter((r) => r.type === t).length;
+                    return (
+                      <label
+                        key={t}
+                        onClick={() => setSelectedType(t)}
+                        className="flex items-center justify-between cursor-pointer group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="radio"
+                            name="roomType"
+                            checked={selectedType === t}
+                            onChange={() => setSelectedType(t)}
+                            className="size-4 text-primary focus:ring-primary border-border"
+                          />
+                          <span className="font-sans text-sm text-charcoal group-hover:text-primary transition-colors">
+                            {t}
+                          </span>
+                        </div>
+                        <span className="text-xs text-warm-gray font-medium">({count})</span>
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
 

@@ -9,41 +9,41 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Deep forest green — calm, luxurious, nature-forward
+        // Royal Blue Brand Palette (#011D7E)
         primary: {
-          DEFAULT: "#17382F",
-          dark: "#0E2922",
-          light: "#1F4D3A",
+          DEFAULT: "#011D7E",
+          dark: "#00114D",
+          light: "#0D2F9E",
         },
         secondary: {
-          DEFAULT: "#DDD6C7",
-          dark: "#C8BEA8",
-          light: "#EDE8DF",
+          DEFAULT: "#F1EDE2",
+          dark: "#E2D9C4",
+          light: "#F9F7F1",
         },
-        // Antique gold — restrained, elegant accent only
+        // Royal Gold Brand Accent (#E4C950)
         accent: {
-          DEFAULT: "#B69A62",
-          dark: "#9A8048",
-          light: "#CAB07A",
+          DEFAULT: "#E4C950",
+          dark: "#C5A51E",
+          light: "#F3E17E",
         },
-        // Muted sage — secondary text, decorative
+        // Royal Slate — secondary text & subtle UI
         sage: {
-          DEFAULT: "#6F8275",
-          light: "#8FA097",
-          dark: "#556462",
+          DEFAULT: "#546E8A",
+          light: "#7A94B0",
+          dark: "#384E66",
         },
-        background: "#F7F5EF",
-        surface: "#FCFBF7",
-        charcoal: "#1E2823",
-        "warm-gray": "#69736C",
-        border: "#D8D5CC",
-        success: "#2E7D5B",
-        error: "#B4534B",
-        warning: "#C97B2D",
-        // Ivory tones
-        ivory: "#F7F5EF",
-        "warm-white": "#FCFBF7",
-        beige: "#DDD6C7",
+        background: "#F8F9FD",
+        surface: "#FFFFFF",
+        charcoal: "#0B132B",
+        "warm-gray": "#5A6578",
+        border: "#E2E6EE",
+        success: "#1E8E5A",
+        error: "#D13838",
+        warning: "#D9822B",
+        // Pearl & Ivory tones
+        ivory: "#F8F9FD",
+        "warm-white": "#FFFFFF",
+        beige: "#F1EDE2",
       },
       fontFamily: {
         serif: ["Cormorant Garamond", "Playfair Display", "Georgia", "serif"],
@@ -57,10 +57,10 @@ const config: Config = {
         "128": "32rem",
       },
       boxShadow: {
-        card: "0 1px 3px 0 rgba(14,41,34,0.08), 0 1px 2px -1px rgba(14,41,34,0.06)",
-        "card-hover": "0 6px 20px 0 rgba(14,41,34,0.10), 0 2px 8px -2px rgba(14,41,34,0.08)",
-        panel: "0 4px 24px 0 rgba(14,41,34,0.08)",
-        "xs": "0 1px 2px 0 rgba(14,41,34,0.06)",
+        card: "0 1px 3px 0 rgba(1, 29, 126, 0.08), 0 1px 2px -1px rgba(1, 29, 126, 0.06)",
+        "card-hover": "0 8px 24px 0 rgba(1, 29, 126, 0.12), 0 2px 8px -2px rgba(1, 29, 126, 0.08)",
+        panel: "0 4px 24px 0 rgba(1, 29, 126, 0.08)",
+        "xs": "0 1px 2px 0 rgba(1, 29, 126, 0.06)",
       },
       borderRadius: {
         xs: "2px",
