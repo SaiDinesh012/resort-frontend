@@ -79,7 +79,11 @@ function ResortExperiencesContent() {
   // Dynamically derive tabs from whichever categories exist in the active data
   const dynamicCategories = useMemo(() => {
     const uniqueCategories = Array.from(
-      new Set(experiences.map((exp) => exp.category).filter(Boolean))
+      new Set(
+        experiences
+          .map((exp) => exp.category?.trim())
+          .filter((cat): cat is string => Boolean(cat))
+      )
     );
 
     return [

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { SlidersHorizontal, X, Loader2, Calendar, CheckCircle2 } from "lucide-react";
 import { RoomCard } from "@/components/website/RoomCard";
@@ -74,9 +74,15 @@ function RoomsContent() {
   }, [checkInParam, checkOutParam, adultsParam, childrenParam]);
 
   // Dynamically derive room types from active rooms in database
-  const availableTypes = useMemo(() => {
-    const fromRooms = Array.from(new Set(rooms.map((r) => r.type).filter(Boolean)));
-    return fromRooms.length > 0 ? fromRooms : ROOM_TYPES;
+  const availableTypes: string[] = useMemo(() => {
+    const fromRooms = Array.from(
+      new Set(
+        rooms
+          .map((r) => r.type?.trim())
+          .filter((t): t is string => Boolean(t))
+      )
+    );
+    return fromRooms.length > 0 ? fromRooms : [...ROOM_TYPES];
   }, [rooms]);
 
   const filtered = rooms.filter((r) => {
@@ -176,7 +182,7 @@ function RoomsContent() {
                       All Accommodations
                     </span>
                   </label>
-                  {availableTypes.map((t) => {
+                  {availableTypes.map((t: string) => {
                     const count = rooms.filter((r) => r.type === t).length;
                     return (
                       <label
