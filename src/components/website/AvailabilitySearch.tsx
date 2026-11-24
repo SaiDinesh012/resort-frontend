@@ -150,7 +150,7 @@ export function AvailabilitySearch({ variant = "hero", className }: Availability
   return (
     <div
       className={cn(
-        "bg-white rounded-sm shadow-2xl border border-white/20 backdrop-blur-md overflow-hidden text-left",
+        "luxury-glass rounded-2xl shadow-2xl overflow-hidden text-left transition-all duration-300",
         variant === "hero" ? "w-full max-w-4xl" : "",
         className
       )}
@@ -162,14 +162,14 @@ export function AvailabilitySearch({ variant = "hero", className }: Availability
         </div>
       )}
 
-      <div className="grid grid-cols-2 lg:grid-cols-5 divide-y lg:divide-y-0 lg:divide-x divide-border">
+      <div className="grid grid-cols-2 lg:grid-cols-5 divide-y lg:divide-y-0 lg:divide-x divide-border/60">
         {/* Check-in */}
-        <div className="col-span-1 p-4 lg:p-5 hover:bg-warm-white/50 transition-colors">
+        <div className="col-span-1 p-4 lg:p-5 hover:bg-accent/5 transition-colors">
           <label className="block text-[11px] font-semibold text-muted-sage uppercase tracking-wider mb-1.5">
             Check-in
           </label>
           <div className="flex items-center gap-2">
-            <Calendar className="size-4 text-primary flex-shrink-0" />
+            <Calendar className="size-4 text-accent flex-shrink-0" />
             <input
               type="date"
               value={checkIn}
@@ -182,12 +182,12 @@ export function AvailabilitySearch({ variant = "hero", className }: Availability
         </div>
 
         {/* Check-out */}
-        <div className="col-span-1 p-4 lg:p-5 hover:bg-warm-white/50 transition-colors">
+        <div className="col-span-1 p-4 lg:p-5 hover:bg-accent/5 transition-colors">
           <label className="block text-[11px] font-semibold text-muted-sage uppercase tracking-wider mb-1.5">
             Check-out
           </label>
           <div className="flex items-center gap-2">
-            <Calendar className="size-4 text-primary flex-shrink-0" />
+            <Calendar className="size-4 text-accent flex-shrink-0" />
             <input
               type="date"
               value={checkOut}
@@ -200,12 +200,12 @@ export function AvailabilitySearch({ variant = "hero", className }: Availability
         </div>
 
         {/* Adults */}
-        <div className="col-span-1 p-4 lg:p-5 hover:bg-warm-white/50 transition-colors">
+        <div className="col-span-1 p-4 lg:p-5 hover:bg-accent/5 transition-colors">
           <label className="block text-[11px] font-semibold text-muted-sage uppercase tracking-wider mb-1.5">
             Adults
           </label>
           <div className="flex items-center gap-2">
-            <Users className="size-4 text-primary flex-shrink-0" />
+            <Users className="size-4 text-accent flex-shrink-0" />
             <select
               value={adults}
               onChange={(e) => setAdults(Number(e.target.value))}
@@ -222,12 +222,12 @@ export function AvailabilitySearch({ variant = "hero", className }: Availability
         </div>
 
         {/* Children */}
-        <div className="col-span-1 p-4 lg:p-5 hover:bg-warm-white/50 transition-colors">
+        <div className="col-span-1 p-4 lg:p-5 hover:bg-accent/5 transition-colors">
           <label className="block text-[11px] font-semibold text-muted-sage uppercase tracking-wider mb-1.5">
             Children
           </label>
           <div className="flex items-center gap-2">
-            <Users className="size-4 text-primary flex-shrink-0" />
+            <Users className="size-4 text-accent flex-shrink-0" />
             <select
               value={children}
               onChange={(e) => setChildren(Number(e.target.value))}
@@ -244,11 +244,11 @@ export function AvailabilitySearch({ variant = "hero", className }: Availability
         </div>
 
         {/* Search button */}
-        <div className="col-span-2 lg:col-span-1 p-3 flex items-center justify-center">
+        <div className="col-span-2 lg:col-span-1 p-3.5 lg:p-4 flex items-center justify-center bg-primary-dark/5">
           <button
             onClick={handleSearch}
             disabled={isLoading}
-            className="w-full h-full min-h-[52px] rounded-sm bg-accent hover:bg-accent-dark text-white font-sans font-semibold text-sm transition-all flex items-center justify-center gap-2 px-4 shadow-sm hover:shadow cursor-pointer disabled:opacity-60"
+            className="w-full h-full min-h-[50px] rounded-xl bg-accent hover:bg-accent-dark text-primary-dark font-sans font-bold text-xs uppercase tracking-widest shadow-md hover:shadow-accent/40 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center gap-2 px-4 cursor-pointer disabled:opacity-60"
             aria-label="Search room availability"
           >
             {isLoading ? (

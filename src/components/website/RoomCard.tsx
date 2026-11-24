@@ -21,7 +21,7 @@ export function RoomCard({ room, className, compact = false }: RoomCardProps) {
   return (
     <article
       className={cn(
-        "group bg-surface rounded-sm overflow-hidden border border-border hover:border-sage/50 transition-all duration-400 hover:shadow-card-hover",
+        "group bg-surface rounded-2xl overflow-hidden border border-border luxury-card",
         className
       )}
     >
@@ -31,65 +31,70 @@ export function RoomCard({ room, className, compact = false }: RoomCardProps) {
           src={room.images?.[0] || fallbackImage}
           alt={`${room.name} — Royalgrandin Resort`}
           fill
-          className="object-cover group-hover:scale-[1.03] transition-transform duration-700"
+          className="object-cover group-hover:scale-[1.045] transition-transform duration-700 ease-out"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary-dark/80 via-transparent to-black/20 opacity-40 group-hover:opacity-65 transition-opacity duration-500 pointer-events-none" />
+
         {/* Availability chip */}
         <div className="absolute top-3 left-3">
           <span
             className={cn(
-              "text-xs font-medium px-2.5 py-1 rounded-full",
+              "text-[10px] font-semibold tracking-wider uppercase px-3 py-1 rounded-full backdrop-blur-md border border-white/20",
               room.status === "available"
-                ? "bg-success/90 text-white"
-                : "bg-charcoal/70 text-white"
+                ? "bg-emerald-600/90 text-white"
+                : "bg-charcoal/80 text-white"
             )}
           >
             {room.status === "available" ? "Available" : room.status.charAt(0).toUpperCase() + room.status.slice(1)}
           </span>
         </div>
         {/* Price overlay */}
-        <div className="absolute bottom-0 right-0 bg-gradient-to-tl from-charcoal/70 to-transparent px-4 pt-8 pb-3">
-          <p className="text-white text-xs font-medium">From</p>
-          <p className="text-white text-lg font-bold leading-none">
+        <div className="absolute bottom-0 right-0 bg-gradient-to-tl from-primary-dark/90 via-primary-dark/60 to-transparent px-5 pt-8 pb-3.5 text-right">
+          <p className="text-white/80 text-[10px] tracking-wider uppercase font-semibold">From</p>
+          <p className="text-white text-xl font-bold leading-none font-serif mt-0.5">
             {formatCurrency(room.basePrice)}
           </p>
-          <p className="text-white/70 text-xs">per night</p>
+          <p className="text-white/70 text-[10px] mt-0.5">per night</p>
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-5">
+      <div className="p-6">
         {/* Rating + type */}
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-medium text-warm-gray uppercase tracking-wider">
+        <div className="flex items-center justify-between mb-2.5">
+          <span className="text-[10px] font-semibold text-accent-dark uppercase tracking-widest">
             {room.type}
           </span>
           <div className="flex items-center gap-1">
             <Star className="size-3.5 fill-accent text-accent" />
-            <span className="text-sm font-medium text-charcoal">{room.rating}</span>
-            <span className="text-xs text-warm-gray">({room.reviewCount})</span>
+            <span className="text-xs font-semibold text-charcoal">{room.rating}</span>
+            <span className="text-[11px] text-warm-gray">({room.reviewCount})</span>
           </div>
         </div>
 
         {/* Title */}
-        <h3 className="font-serif text-xl font-light text-charcoal mb-2 group-hover:text-primary transition-colors leading-tight">
+        <h3 className="font-serif text-2xl font-light text-charcoal mb-2 group-hover:text-primary transition-colors leading-tight">
           {room.name}
         </h3>
 
+        {/* Hairline gold rule that expands on hover */}
+        <div className="hairline-gold mb-3.5" />
+
         {!compact && (
-          <p className="text-sm text-warm-gray leading-relaxed mb-4 line-clamp-2">
+          <p className="text-xs text-warm-gray leading-relaxed mb-4 line-clamp-2">
             {room.description}
           </p>
         )}
 
         {/* Meta */}
-        <div className="flex items-center gap-4 text-xs text-warm-gray mb-4">
-          <span className="flex items-center gap-1">
-            <Users className="size-3.5" />
+        <div className="flex items-center gap-4 text-xs text-warm-gray mb-4 pb-3 border-b border-border/70">
+          <span className="flex items-center gap-1.5">
+            <Users className="size-3.5 text-accent" />
             Up to {room.maxOccupancy} guests
           </span>
-          <span className="flex items-center gap-1">
-            <Maximize className="size-3.5" />
+          <span className="flex items-center gap-1.5">
+            <Maximize className="size-3.5 text-accent" />
             {room.size} sq ft
           </span>
         </div>
@@ -100,14 +105,14 @@ export function RoomCard({ room, className, compact = false }: RoomCardProps) {
             {room.amenities.slice(0, 4).map((a) => (
               <span
                 key={a}
-                className="flex items-center gap-1 text-xs px-2 py-0.5 bg-background rounded text-warm-gray border border-border"
+                className="flex items-center gap-1 text-[11px] px-2.5 py-1 bg-background rounded-full text-warm-gray border border-border"
               >
                 {amenityIcons[a] ?? null}
                 {a}
               </span>
             ))}
             {room.amenities.length > 4 && (
-              <span className="text-xs px-2 py-0.5 bg-background rounded text-warm-gray border border-border">
+              <span className="text-[11px] px-2.5 py-1 bg-background rounded-full text-warm-gray border border-border">
                 +{room.amenities.length - 4} more
               </span>
             )}
@@ -115,18 +120,18 @@ export function RoomCard({ room, className, compact = false }: RoomCardProps) {
         )}
 
         {/* Actions */}
-        <div className="flex gap-2">
+        <div className="flex gap-2.5">
           <Link
             href={`/rooms/${room.slug}`}
-            className="flex-1 text-center py-2.5 rounded-sm border border-primary text-primary font-sans text-sm font-medium hover:bg-primary hover:text-white transition-colors"
+            className="flex-1 text-center py-2.5 rounded-full border border-primary/30 text-primary hover:border-primary font-sans text-xs font-semibold uppercase tracking-wider hover:bg-primary/5 transition-all duration-300"
           >
-            View Details
+            Explore
           </Link>
           <Link
             href={`/booking?room=${room.slug}`}
-            className="flex-1 text-center py-2.5 rounded-sm bg-primary hover:bg-primary-dark text-white font-sans text-sm font-medium transition-colors"
+            className="flex-1 text-center py-2.5 rounded-full bg-primary hover:bg-primary-dark text-white font-sans text-xs font-semibold uppercase tracking-wider shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5"
           >
-            Book Now
+            Reserve
           </Link>
         </div>
       </div>

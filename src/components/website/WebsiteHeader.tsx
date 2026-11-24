@@ -45,8 +45,8 @@ export function WebsiteHeader() {
         className={cn(
           "fixed top-0 left-0 right-0 z-40 transition-all duration-500",
           isTransparent
-            ? "bg-transparent"
-            : "bg-primary-dark/97 backdrop-blur-md border-b border-white/10 shadow-sm"
+            ? "bg-transparent py-5"
+            : "bg-primary-dark/90 backdrop-blur-md border-b border-white/10 shadow-lg py-3.5"
         )}
         role="banner"
       >
@@ -71,11 +71,11 @@ export function WebsiteHeader() {
               ) : (
                 /* Text-only logo when no image uploaded */
                 <div className="flex flex-col leading-none">
-                  <span className="font-serif text-lg font-light text-white tracking-wide leading-none">
+                  <span className="font-serif text-xl font-light text-white tracking-wide leading-none group-hover:text-accent transition-colors">
                     Royalgrandin
                   </span>
-                  <span className="font-sans text-[9px] font-medium text-accent/80 tracking-[0.25em] uppercase mt-0.5">
-                    RESORT
+                  <span className="font-sans text-[9px] font-semibold text-accent/90 tracking-[0.3em] uppercase mt-1">
+                    RESORT • MAREDUMILLI
                   </span>
                 </div>
               )}
@@ -115,10 +115,10 @@ export function WebsiteHeader() {
               </Link>
               <Link
                 href="/booking"
-                className="px-5 py-2.5 rounded-sm bg-accent hover:bg-accent-dark text-white font-sans font-semibold text-sm tracking-wide transition-all"
+                className="px-6 py-2.5 rounded-full bg-accent hover:bg-accent-dark text-primary-dark font-sans font-semibold text-xs tracking-wider uppercase shadow-md hover:shadow-accent/30 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer"
                 aria-label="Book Now"
               >
-                Book Now
+                Book Your Stay
               </Link>
             </div>
 

@@ -6,7 +6,7 @@ import Image from "next/image";
 import {
   Waves, Utensils, Wifi, Car, Compass, Leaf, Flame,
   Star, ChevronDown, MapPin, ArrowRight, Check, Plus,
-  Minus, Phone, TreePine, Mountain, Wind,
+  Minus, Phone, TreePine, Mountain, Wind, Sparkles,
 } from "lucide-react";
 import { AvailabilitySearch } from "@/components/website/AvailabilitySearch";
 import { RoomCard } from "@/components/website/RoomCard";
@@ -198,23 +198,23 @@ export default function HomePage() {
             src={heroImage}
             alt="Royalgrandin Resort — Maredumilli Forest"
             fill
-            className="object-cover animate-slow-zoom"
+            className="object-cover animate-ken-burns"
             priority
             sizes="100vw"
           />
           {/* Deep atmospheric gradient overlay — top dark, centre clear, bottom dark */}
-          <div className="absolute inset-0 bg-gradient-to-b from-primary-dark/70 via-primary-dark/20 to-primary-dark/75" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary-dark/75 via-primary-dark/25 to-primary-dark/85" />
           {/* Subtle vignette */}
-          <div className="absolute inset-0 bg-radial-[at_50%_60%] from-transparent via-transparent to-primary-dark/40" />
+          <div className="absolute inset-0 bg-radial-[at_50%_60%] from-transparent via-transparent to-primary-dark/50" />
         </div>
 
         {/* Hero content */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20 flex flex-col items-center text-center">
           {/* Location badge */}
-          <div className="inline-flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
+          <div className="inline-flex items-center gap-2 mb-8 px-5 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/25 shadow-lg">
             <MapPin className="size-3.5 text-accent" aria-hidden="true" />
-            <span className="font-sans text-white/90 text-xs font-medium tracking-[0.15em] uppercase">
-              Maredumilli • Andhra Pradesh
+            <span className="font-sans text-white/95 text-xs font-semibold tracking-[0.2em] uppercase">
+              Maredumilli • Eastern Ghats, Andhra Pradesh
             </span>
           </div>
 
@@ -224,31 +224,34 @@ export default function HomePage() {
           </h1>
 
           {/* Antique gold rule */}
-          <div className="w-12 h-px bg-accent mb-6" aria-hidden="true" />
+          <div className="w-14 h-[1.5px] bg-accent mb-6" aria-hidden="true" />
 
           {/* Sub headline */}
-          <p className="font-sans text-white/75 text-base sm:text-lg max-w-2xl leading-relaxed mb-10">
+          <p className="font-sans text-white/80 text-base sm:text-lg max-w-2xl leading-relaxed mb-10 font-normal">
             {heroSubtitle}
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-16">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-14">
             <Link
               href="/resort"
-              className="px-8 py-3.5 rounded-sm bg-accent hover:bg-accent-dark text-white font-sans font-semibold text-sm tracking-wide transition-all hover:shadow-lg"
+              className="px-8 py-3.5 rounded-full bg-accent hover:bg-accent-dark text-primary-dark font-sans font-semibold text-xs tracking-widest uppercase shadow-lg hover:shadow-accent/40 transition-all duration-300 transform hover:-translate-y-0.5"
             >
               Explore the Resort
             </Link>
             <Link
               href="/rooms"
-              className="px-8 py-3.5 rounded-sm bg-white/10 hover:bg-white/20 border border-white/30 text-white font-sans font-semibold text-sm tracking-wide backdrop-blur-sm transition-all"
+              className="px-8 py-3.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/30 text-white font-sans font-semibold text-xs tracking-widest uppercase backdrop-blur-md transition-all duration-300 transform hover:-translate-y-0.5"
             >
-              View Rooms
+              View Luxury Villas
             </Link>
           </div>
 
-          {/* Availability search bar */}
-          <div className="w-full flex justify-center">
+          {/* Availability search bar with direct reservation micro-badge */}
+          <div className="w-full flex flex-col items-center">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[11px] font-semibold tracking-[0.2em] uppercase mb-4 shadow-sm">
+              <Sparkles className="size-3 text-accent" /> Direct Reservation • Best Rates Guaranteed
+            </div>
             <AvailabilitySearch variant="hero" />
           </div>
         </div>
@@ -514,49 +517,61 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {reviews.slice(0, 4).map((review) => (
                 <article
                   key={review.id}
-                  className="bg-surface border border-border rounded-sm p-6 hover:shadow-card-hover transition-shadow"
+                  className="bg-surface border border-border rounded-2xl p-7 luxury-card relative overflow-hidden group"
                 >
+                  {/* Subtle watermark quote mark */}
+                  <span className="absolute -top-3 right-4 text-7xl font-serif text-primary/5 select-none pointer-events-none group-hover:text-accent/15 transition-colors">
+                    “
+                  </span>
+
                   {/* Stars */}
-                  <div className="flex mb-4" aria-label={`${review.rating || 5} out of 5 stars`}>
+                  <div className="flex items-center gap-1 mb-4" aria-label={`${review.rating || 5} out of 5 stars`}>
                     {Array.from({ length: review.rating || 5 }).map((_, i) => (
-                      <Star key={i} className="size-3.5 fill-accent text-accent" aria-hidden="true" />
+                      <Star key={i} className="size-4 fill-accent text-accent" aria-hidden="true" />
                     ))}
                   </div>
+
                   {review.title && (
-                    <h3 className="font-sans font-semibold text-charcoal text-sm mb-2">{review.title}</h3>
+                    <h3 className="font-sans font-semibold text-charcoal text-sm mb-2.5 leading-snug">
+                      {review.title}
+                    </h3>
                   )}
-                  <p className="font-sans text-sm text-warm-gray leading-relaxed mb-5 line-clamp-4">
+
+                  <p className="font-sans text-xs text-warm-gray leading-relaxed mb-6 line-clamp-4">
                     {review.body}
                   </p>
+
                   {/* Guest info */}
-                  <div className="flex items-center gap-3 pt-4 border-t border-border">
+                  <div className="flex items-center gap-3 pt-4 border-t border-border/70">
                     {review.customerAvatar ? (
                       <Image
                         src={review.customerAvatar}
                         alt={`${review.customerName} profile photo`}
-                        width={32}
-                        height={32}
-                        className="rounded-full object-cover size-8"
+                        width={36}
+                        height={36}
+                        className="rounded-full object-cover size-9 border border-border"
                       />
                     ) : (
-                      <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold font-sans" aria-hidden="true">
+                      <div className="size-9 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold font-sans" aria-hidden="true">
                         {review.customerName?.[0] || "G"}
                       </div>
                     )}
                     <div>
-                      <p className="font-sans text-xs font-semibold text-charcoal flex items-center gap-1.5 flex-wrap">
-                        <span>{review.customerName}</span>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <p className="font-sans text-xs font-semibold text-charcoal">
+                          {review.customerName}
+                        </p>
                         {review.customerCity && (
-                          <span className="text-accent font-medium text-[11px]">
-                            • {review.customerCity}
+                          <span className="px-2 py-0.5 rounded-full bg-accent/15 text-accent-dark font-semibold text-[10px] tracking-wide uppercase">
+                            {review.customerCity}
                           </span>
                         )}
-                      </p>
-                      <p className="font-sans text-xs text-warm-gray">
+                      </div>
+                      <p className="font-sans text-[11px] text-warm-gray mt-0.5">
                         {new Date(review.createdAt || Date.now()).toLocaleDateString("en-IN", { month: "short", year: "numeric" })}
                       </p>
                     </div>
@@ -591,17 +606,25 @@ export default function HomePage() {
               {attractions.slice(0, 5).map((attraction) => (
                 <article
                   key={attraction.id}
-                  className="bg-white/[0.05] border border-white/[0.08] rounded-sm p-5 hover:bg-white/[0.09] transition-colors"
+                  className="luxury-dark-glass rounded-xl p-5 hover:border-accent/40 transition-all duration-300 transform hover:-translate-y-1 group"
                 >
-                  <div className="flex items-center gap-2 mb-3">
-                    <MapPin className="size-3.5 text-accent flex-shrink-0" aria-hidden="true" />
-                    <span className="font-sans text-xs text-white/50">{attraction.distance}</span>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-1.5">
+                      <MapPin className="size-3.5 text-accent flex-shrink-0" aria-hidden="true" />
+                      <span className="font-sans text-xs text-white/70">{attraction.distance}</span>
+                    </div>
+                    {attraction.duration && (
+                      <span className="px-2 py-0.5 rounded-full bg-white/10 text-accent-light text-[10px] font-medium tracking-wide">
+                        {attraction.duration}
+                      </span>
+                    )}
                   </div>
-                  <h3 className="font-sans font-semibold text-white text-sm mb-2 leading-snug">{attraction.name}</h3>
-                  <p className="font-sans text-xs text-white/45 leading-relaxed line-clamp-3">{attraction.description}</p>
-                  {attraction.duration && (
-                    <p className="font-sans text-xs text-accent/70 font-medium mt-3">{attraction.duration}</p>
-                  )}
+                  <h3 className="font-sans font-semibold text-white text-sm mb-2 leading-snug group-hover:text-accent transition-colors">
+                    {attraction.name}
+                  </h3>
+                  <p className="font-sans text-xs text-white/55 leading-relaxed line-clamp-3">
+                    {attraction.description}
+                  </p>
                 </article>
               ))}
             </div>

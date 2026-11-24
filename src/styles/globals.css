@@ -124,13 +124,63 @@
 
   /* Slow hero image zoom animation */
   .animate-slow-zoom {
-    animation: slowZoom 10s ease-out forwards;
+    animation: slowKenBurns 20s cubic-bezier(0.25, 1, 0.5, 1) infinite alternate;
+    will-change: transform;
+  }
+
+  .animate-ken-burns {
+    animation: slowKenBurns 24s cubic-bezier(0.25, 1, 0.5, 1) infinite alternate;
+    will-change: transform;
   }
 
   /* Fade up on scroll */
   .animate-fade-up {
-    animation: fadeUp 0.7s ease-out both;
+    animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
+
+  /* Luxury Glass Container */
+  .luxury-glass {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 20px 40px -15px rgba(11, 19, 43, 0.08), 0 0 1px 1px rgba(228, 201, 80, 0.15);
+  }
+
+  .luxury-dark-glass {
+    background: rgba(0, 17, 77, 0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Hairline gold hover line */
+  .hairline-gold {
+    width: 24px;
+    height: 1.5px;
+    background-color: #E4C950;
+    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .group:hover .hairline-gold {
+    width: 48px;
+  }
+
+  /* Luxury card lift */
+  .luxury-card {
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+  }
+  .luxury-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 35px -10px rgba(1, 29, 126, 0.09);
+    border-color: rgba(228, 201, 80, 0.4);
+  }
+}
+
+@keyframes slowKenBurns {
+  0% { transform: scale(1.08) translate3d(0, 0, 0); }
+  50% { transform: scale(1.02) translate3d(-0.4%, -0.4%, 0); }
+  100% { transform: scale(1.08) translate3d(0, 0, 0); }
 }
 
 @keyframes shimmer {
