@@ -12,12 +12,12 @@ export const initialLegalPolicies: LegalPolicyData[] = [
   {
     slug: "privacy-policy",
     title: "Privacy Policy",
-    subtitle: "How Royal Grand IN Resorts protects and respects your personal privacy",
+    subtitle: "How Royalgrandin Resort protects and respects your personal privacy",
     lastUpdated: "October 2026",
     status: "published",
     order: 1,
     content: `## 1. Introduction
-At **Royal Grand IN Resorts** (Maredumilli, Andhra Pradesh), we hold the privacy and trust of our guests in the highest regard. This Privacy Policy details the types of information we collect when you make reservations, visit our website, or reside at our sanctuary in Maredumilli, and how we handle and protect that information.
+At **Royalgrandin Resort** (Maredumilli, Andhra Pradesh), we hold the privacy and trust of our guests in the highest regard. This Privacy Policy details the types of information we collect when you make reservations, visit our website, or reside at our sanctuary in Maredumilli, and how we handle and protect that information.
 
 ## 2. Information We Collect
 To provide a bespoke luxury retreat experience, we collect information including:
@@ -40,7 +40,7 @@ We maintain stringent technical, operational, and organizational security protoc
 For inquiries or to request updates or deletion of your stored records, please reach out directly:
 - **Email:** reservations@royalgrandin.com
 - **Phone:** +91 98765 43210
-- **Address:** Royal Grand IN Resorts, Maredumilli, East Godavari District, Andhra Pradesh 533288, India`,
+- **Address:** Royalgrandin Resort, Maredumilli, East Godavari District, Andhra Pradesh 533288, India`,
   },
   {
     slug: "terms-and-conditions",
@@ -60,7 +60,7 @@ For inquiries or to request updates or deletion of your stored records, please r
 - All arriving adult guests must present original government-recognized photo identification upon check-in.
 
 ## 3. Nature Sanctuary & Forest Conduct
-Royal Grand IN Resorts is located in the pristine biodiversity belt of Maredumilli. To preserve this sanctuary for all:
+Royalgrandin Resort is located in the pristine biodiversity belt of Maredumilli. To preserve this sanctuary for all:
 - **Quiet Hours:** In accordance with forest conservation ethics, outdoor music and amplified sound are strictly restricted after 10:00 PM.
 - **Flora & Fauna:** Guests are strictly prohibited from disturbing wildlife, plucking rare flora, or littering in forest trails and waterfall areas.
 - **Smoking & Fire Safety:** Open fires are permitted only in designated campfire pits supervised by resort naturalists. Smoking inside enclosed rooms and villas is strictly prohibited.

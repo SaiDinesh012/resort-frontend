@@ -692,7 +692,7 @@ export default function BookingPage() {
                 </p>
 
                 <div className="p-4 bg-background rounded-lg border border-border max-w-md mx-auto text-left text-xs space-y-2 text-warm-gray">
-                  <div className="flex justify-between"><span className="font-medium text-charcoal">Resort:</span> <span>Royal Gradin, Western Ghats</span></div>
+                  <div className="flex justify-between"><span className="font-medium text-charcoal">Resort:</span> <span>Royalgrandin Resort, Maredumilli</span></div>
                   <div className="flex justify-between"><span className="font-medium text-charcoal">Item:</span> <span>{bookingType === "room" ? selectedRoom?.name : selectedPackage?.name}</span></div>
                   <div className="flex justify-between"><span className="font-medium text-charcoal">Check-in:</span> <span>{checkIn}</span></div>
                   <div className="flex justify-between"><span className="font-medium text-charcoal">Check-out:</span> <span>{checkOut}</span></div>

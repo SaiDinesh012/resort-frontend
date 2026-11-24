@@ -56,13 +56,13 @@ const defaultSettings: SiteSettings = {
   tagline: SITE_TAGLINE,
   description: SITE_DESCRIPTION,
   footerDescription:
-    "Nestled amidst the lush forests and tranquil canopy of Maredumilli, Royal Grand IN Resorts offers a refined sanctuary where luxury harmonizes with pristine nature.",
+    "Nestled amidst the lush forests and tranquil canopy of Maredumilli, Royalgrandin Resort offers a refined sanctuary where luxury harmonizes with pristine nature.",
   logoUrl: "",
   phone: SITE_PHONE,
   alternatePhone: "+91 94949 12345",
   email: SITE_EMAIL,
   address: SITE_ADDRESS,
-  googleMapsUrl: "https://maps.google.com/?q=Royal+Grand+IN+Resorts+Maredumilli+Andhra+Pradesh",
+  googleMapsUrl: "https://maps.google.com/?q=Royalgrandin+Resort+Maredumilli+Andhra+Pradesh",
   instagramUrl: "https://instagram.com/royalgrandinresorts",
   facebookUrl: "https://facebook.com/royalgrandinresorts",
   youtubeUrl: "https://youtube.com/@royalgrandinresorts",
@@ -80,7 +80,7 @@ const defaultSettings: SiteSettings = {
   faqHeading: "Frequently Asked Questions",
   faqSubheading: "Support",
   faqEnabled: true,
-  copyrightText: "© {year} Royal Grand IN Resorts. All rights reserved.",
+  copyrightText: "© {year} Royalgrandin Resort. All rights reserved.",
   footerLocationNote: "Maredumilli, East Godavari District, Andhra Pradesh, India",
   checkInTime: "02:00 PM",
   checkOutTime: "11:00 AM",
@@ -117,8 +117,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           ...prev,
           ...data,
           // Ensure correct brand name
-          siteName: (data.siteName === "Royal Gradin" || !data.siteName)
-            ? "Royal Grand IN Resorts"
+          siteName: (data.siteName === "Royal Gradin" || data.siteName === "Royal Grand IN Resorts" || !data.siteName)
+            ? "Royalgrandin Resort"
             : data.siteName,
           tagline: data.tagline || prev.tagline,
           logoUrl: data.logoUrl !== undefined ? data.logoUrl : prev.logoUrl,

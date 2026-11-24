@@ -814,7 +814,7 @@ export default function AccountPage() {
                         </h3>
                         <p className="text-xs max-w-md mx-auto mb-6">
                           {activeTab === "upcoming"
-                            ? "You do not have any upcoming stays scheduled at Royal Grand IN Resorts."
+                            ? "You do not have any upcoming stays scheduled at Royalgrandin Resort."
                             : activeTab === "past"
                             ? "You have no past completed stays logged in your account."
                             : "No cancelled bookings on record."}

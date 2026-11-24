@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await Promise.resolve(params);
   const post = await getBlogPostBySlug(slug);
   return {
-    title: post?.title ? `${post.title} | Royal Grand IN Resorts` : "Blog Article",
+    title: post?.title ? `${post.title} | Royalgrandin Resort` : "Blog Article",
     description: post?.excerpt || "Travel insights and forest stories from Maredumilli.",
   };
 }
@@ -59,7 +59,7 @@ export default async function BlogPostPage({ params }: Props) {
         <span className="text-xs font-semibold text-accent uppercase tracking-wider">{post.category}</span>
         <h1 className="font-serif text-3xl sm:text-5xl font-bold text-charcoal my-4">{post.title}</h1>
         <div className="flex items-center gap-4 text-sm text-warm-gray mb-8">
-          <span>By {post.author || "Royal Grand Editorial"}</span>
+          <span>By {post.author || "Royalgrandin Editorial"}</span>
           <span>•</span>
           <span>{post.readTime || 6} min read</span>
         </div>

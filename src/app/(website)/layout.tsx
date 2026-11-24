@@ -3,8 +3,8 @@ import { WebsiteFooter } from "@/components/website/WebsiteFooter";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Royal Grand IN Resorts | Maredumilli, Andhra Pradesh",
-  description: "Luxury forest resort in Maredumilli, Andhra Pradesh. Stay Once, Carry Memories Forever. Book rooms, packages and experiences at Royal Grand IN Resorts.",
+  title: "Royalgrandin Resort | Maredumilli, Andhra Pradesh",
+  description: "Luxury forest resort in Maredumilli, Andhra Pradesh. Stay Once, Carry Memories Forever. Book rooms, packages and experiences at Royalgrandin Resort.",
 };
 
 export default function WebsiteLayout({ children }: { children: React.ReactNode }) {

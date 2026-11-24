@@ -8,7 +8,7 @@ import connectDB from "@/lib/mongodb";
 import { BlogPost } from "@/lib/models/Content";
 
 export const metadata: Metadata = {
-  title: "Resort Blog & Travel Guides | Royal Grand IN Resorts",
+  title: "Resort Blog & Travel Guides | Royalgrandin Resort",
   description: "Read travel tips, waterfall trails, tribal culinary secrets, and stories from Maredumilli.",
 };
 

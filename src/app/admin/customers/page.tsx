@@ -124,7 +124,7 @@ export default function CustomersManagementPage() {
                         )}
                         <div>
                           <p className="font-semibold">{c.firstName} {c.lastName}</p>
-                          <p className="text-[11px] text-warm-gray">{c.city || "Chikmagalur"}, {c.country || "India"}</p>
+                          <p className="text-[11px] text-warm-gray">{c.city || "Visakhapatnam"}, {c.country || "India"}</p>
                         </div>
                       </div>
                     </td>

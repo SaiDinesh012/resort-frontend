@@ -8,8 +8,8 @@ import connectDB from "@/lib/mongodb";
 import { Attraction } from "@/lib/models/Content";
 
 export const metadata: Metadata = {
-  title: "Nearby Attractions & Sightseeing | Royal Grand IN Resorts Maredumilli",
-  description: "Explore famous waterfalls, river gorges, and tribal sanctuaries near Royal Grand IN Resorts in Maredumilli.",
+  title: "Nearby Attractions & Sightseeing | Royalgrandin Resort Maredumilli",
+  description: "Explore famous waterfalls, river gorges, and tribal sanctuaries near Royalgrandin Resort in Maredumilli.",
 };
 
 async function getAttractions() {

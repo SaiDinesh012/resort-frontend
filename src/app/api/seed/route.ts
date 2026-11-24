@@ -82,8 +82,8 @@ export async function GET(request: Request) {
         taxRate: 18,
         currency: "INR",
         heroImage: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1920&q=90",
-        heroTitle: "Luxury Escape at Royal Gradin",
-        heroSubtitle: "Where Wilderness Meets Unrivaled Sophistication",
+        heroTitle: "Where Royalty Meets the Wild",
+        heroSubtitle: "A luxurious retreat surrounded by lush forests, misty hills and the untouched beauty of Maredumilli.",
       },
     });
 

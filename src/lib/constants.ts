@@ -1,7 +1,7 @@
-export const SITE_NAME = "Royal Grand IN Resorts";
+export const SITE_NAME = "Royalgrandin Resort";
 export const SITE_TAGLINE = "Stay Once, Carry Memories Forever";
 export const SITE_DESCRIPTION =
-  "Nestled amidst the lush forests and serene landscapes of Maredumilli, Royal Grand IN Resorts offers an unparalleled luxury escape where royalty meets the wild.";
+  "Nestled amidst the lush forests and serene landscapes of Maredumilli, Royalgrandin Resort offers an unparalleled luxury escape where royalty meets the wild.";
 export const SITE_PHONE = "+91 98765 43210";
 export const SITE_EMAIL = "reservations@royalgrandin.com";
 export const SITE_ADDRESS = "Maredumilli, East Godavari District, Andhra Pradesh 533288, India";

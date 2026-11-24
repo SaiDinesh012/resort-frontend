@@ -29,7 +29,7 @@ export function RoomCard({ room, className, compact = false }: RoomCardProps) {
       <div className="relative overflow-hidden aspect-[4/3]">
         <Image
           src={room.images?.[0] || fallbackImage}
-          alt={`${room.name} — Royal Grand IN Resorts`}
+          alt={`${room.name} — Royalgrandin Resort`}
           fill
           className="object-cover group-hover:scale-[1.03] transition-transform duration-700"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

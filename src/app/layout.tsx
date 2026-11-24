@@ -4,18 +4,18 @@ import { SettingsProvider } from "@/context/SettingsContext";
 
 export const metadata: Metadata = {
   title: {
-    default: "Royal Grand IN Resorts | Luxury Resort in Maredumilli, Andhra Pradesh",
-    template: "%s | Royal Grand IN Resorts",
+    default: "Royalgrandin Resort | Luxury Resort in Maredumilli, Andhra Pradesh",
+    template: "%s | Royalgrandin Resort",
   },
   description:
-    "Experience unparalleled luxury at Royal Grand IN Resorts, nestled amidst the lush forests and serene landscapes of Maredumilli, Andhra Pradesh. Stay Once, Carry Memories Forever.",
-  keywords: ["luxury resort", "Royal Grand IN Resorts", "Maredumilli resort", "Andhra Pradesh resort", "nature retreat", "forest resort booking"],
-  authors: [{ name: "Royal Grand IN Resorts" }],
+    "Experience unparalleled luxury at Royalgrandin Resort, nestled amidst the lush forests and serene landscapes of Maredumilli, Andhra Pradesh. Stay Once, Carry Memories Forever.",
+  keywords: ["luxury resort", "Royalgrandin Resort", "Royalgrandin", "Maredumilli resort", "Andhra Pradesh resort", "nature retreat", "forest resort booking"],
+  authors: [{ name: "Royalgrandin Resort" }],
   openGraph: {
     type: "website",
     locale: "en_IN",
     url: "https://royalgrandin.com",
-    siteName: "Royal Grand IN Resorts",
+    siteName: "Royalgrandin Resort",
     description: "Luxury forest resort in Maredumilli. Stay Once, Carry Memories Forever.",
   },
 };

@@ -91,7 +91,7 @@ export default function HomePage() {
   const aboutTitle = (globalSettings as any).aboutTitle || "A Forest Retreat Like No Other";
   const aboutBody = (globalSettings as any).aboutBody || SITE_DESCRIPTION;
   const aboutImage = (globalSettings as any).aboutImage || "https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=85";
-  const aboutBadge = (globalSettings as any).aboutBadge || "ABOUT ROYAL GRAND IN";
+  const aboutBadge = (globalSettings as any).aboutBadge || "ABOUT ROYALGRANDIN RESORT";
 
   const fetchFaqs = async () => {
     try {
@@ -196,7 +196,7 @@ export default function HomePage() {
         <div className="absolute inset-0">
           <Image
             src={heroImage}
-            alt="Royal Grand IN Resorts — Maredumilli Forest"
+            alt="Royalgrandin Resort — Maredumilli Forest"
             fill
             className="object-cover animate-slow-zoom"
             priority
@@ -270,7 +270,7 @@ export default function HomePage() {
               <div className="relative aspect-[4/5] rounded-sm overflow-hidden">
                 <Image
                   src={aboutImage}
-                  alt="Royal Grand IN Resorts natural forest setting"
+                  alt="Royalgrandin Resort natural forest setting"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -314,7 +314,7 @@ export default function HomePage() {
               <Link
                 href="/resort"
                 className="inline-flex items-center gap-2 font-sans font-semibold text-sm text-primary hover:text-accent transition-colors group"
-                aria-label="Discover more about Royal Grand IN Resorts"
+                aria-label="Discover more about Royalgrandin Resort"
               >
                 Discover More
                 <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />

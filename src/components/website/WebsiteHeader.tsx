@@ -19,7 +19,7 @@ const NAV_LINKS = [
 
 export function WebsiteHeader() {
   const { settings } = useSiteSettings();
-  const siteName = settings.siteName || "Royal Grand IN Resorts";
+  const siteName = settings.siteName || "Royalgrandin Resort";
   const logoUrl = settings.logoUrl;
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -72,10 +72,10 @@ export function WebsiteHeader() {
                 /* Text-only logo when no image uploaded */
                 <div className="flex flex-col leading-none">
                   <span className="font-serif text-lg font-light text-white tracking-wide leading-none">
-                    Royal Grand IN
+                    Royalgrandin
                   </span>
                   <span className="font-sans text-[9px] font-medium text-accent/80 tracking-[0.25em] uppercase mt-0.5">
-                    RESORTS
+                    RESORT
                   </span>
                 </div>
               )}

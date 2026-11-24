@@ -37,16 +37,16 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<"resort" | "footer" | "email" | "payment" | "analytics" | "features">("resort");
 
   const [settings, setSettings] = useState({
-    siteName: "Royal Grand IN Resorts",
+    siteName: "Royalgrandin Resort",
     tagline: SITE_TAGLINE || "Stay Once, Carry Memories Forever",
     logoUrl: "",
     phone: SITE_PHONE,
     alternatePhone: "+91 94949 12345",
     email: SITE_EMAIL,
     address: SITE_ADDRESS,
-    googleMapsUrl: "https://maps.google.com/?q=Royal+Grand+IN+Resorts+Maredumilli+Andhra+Pradesh",
+    googleMapsUrl: "https://maps.google.com/?q=Royalgrandin+Resort+Maredumilli+Andhra+Pradesh",
     footerDescription:
-      "Nestled amidst the lush forests and tranquil canopy of Maredumilli, Royal Grand IN Resorts offers a refined sanctuary where luxury harmonizes with pristine nature.",
+      "Nestled amidst the lush forests and tranquil canopy of Maredumilli, Royalgrandin Resort offers a refined sanctuary where luxury harmonizes with pristine nature.",
     instagramUrl: "https://instagram.com/royalgrandinresorts",
     facebookUrl: "https://facebook.com/royalgrandinresorts",
     youtubeUrl: "https://youtube.com/@royalgrandinresorts",
@@ -61,7 +61,7 @@ export default function SettingsPage() {
     faqHeading: "Frequently Asked Questions",
     faqSubheading: "Support",
     faqEnabled: true,
-    copyrightText: "© {year} Royal Grand IN Resorts. All rights reserved.",
+    copyrightText: "© {year} Royalgrandin Resort. All rights reserved.",
     footerLocationNote: "Maredumilli, East Godavari District, Andhra Pradesh, India",
     checkInTime: "02:00 PM",
     checkOutTime: "11:00 AM",
@@ -73,7 +73,7 @@ export default function SettingsPage() {
     gaMeasurementId: "G-VNP8899XX",
     gtmContainerId: "GTM-VNP123",
     razorpayKeyId: "rzp_test_9876543210ABC",
-    smtpSender: "Royal Grand IN Resorts Reservations",
+    smtpSender: "Royalgrandin Resort Reservations",
   });
 
   const [features, setFeatures] = useState({
@@ -94,8 +94,8 @@ export default function SettingsPage() {
           setSettings((prev) => ({
             ...prev,
             ...data,
-            siteName: (data.siteName === "Royal Gradin" || data.siteName === "Vanapriya Resort" || !data.siteName)
-              ? "Royal Grand IN Resorts"
+            siteName: (data.siteName === "Royal Gradin" || data.siteName === "Vanapriya Resort" || data.siteName === "Royal Grand IN Resorts" || !data.siteName)
+              ? "Royalgrandin Resort"
               : data.siteName,
             email: (data.email === "reservations@vanapriya.com" || data.email === "reservations@royalgradin.com" || !data.email)
               ? "reservations@royalgrandin.com"
@@ -396,7 +396,7 @@ export default function SettingsPage() {
                       value={settings.siteName}
                       onChange={(e) => setSettings({ ...settings, siteName: e.target.value })}
                       className="w-full px-3 py-2 rounded border border-border text-charcoal font-semibold focus:outline-none focus:border-primary bg-white text-sm"
-                      placeholder="Royal Gradin"
+                      placeholder="Royalgrandin Resort"
                     />
                   </div>
                   <div>
@@ -438,7 +438,7 @@ export default function SettingsPage() {
                         value={settings.email}
                         onChange={(e) => setSettings({ ...settings, email: e.target.value })}
                         className="w-full pl-9 pr-3 py-2 rounded border border-border text-charcoal focus:outline-none focus:border-primary bg-white"
-                        placeholder="reservations@royalgradin.com"
+                        placeholder="reservations@royalgrandin.com"
                       />
                     </div>
                   </div>
@@ -455,7 +455,7 @@ export default function SettingsPage() {
                       value={settings.address}
                       onChange={(e) => setSettings({ ...settings, address: e.target.value })}
                       className="w-full pl-9 pr-3 py-2 rounded border border-border text-charcoal focus:outline-none focus:border-primary bg-white"
-                      placeholder="Survey No. 45, Chikmagalur-Koppa Road, Karnataka 577111, India"
+                      placeholder="Maredumilli, East Godavari District, Andhra Pradesh 533288, India"
                     />
                   </div>
                 </div>
@@ -626,7 +626,7 @@ export default function SettingsPage() {
                       value={settings.copyrightText}
                       onChange={(e) => setSettings({ ...settings, copyrightText: e.target.value })}
                       className="w-full px-3 py-2 rounded border border-border text-charcoal focus:outline-none focus:border-primary bg-white"
-                      placeholder="© {year} Royal Grand IN Resorts. All rights reserved."
+                      placeholder="© {year} Royalgrandin Resort. All rights reserved."
                     />
                     <span className="text-[10px] text-warm-gray mt-1 block">
                       Tip: Use &#123;year&#125; and &#123;siteName&#125; tokens to automatically fill the current year and resort name.

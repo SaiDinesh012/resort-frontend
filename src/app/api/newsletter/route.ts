@@ -27,13 +27,13 @@ export async function POST(request: Request) {
         await subscriber.save();
         return NextResponse.json({
           success: true,
-          message: "Welcome back! Your subscription to Royal Grand IN Resorts has been reactivated.",
+          message: "Welcome back! Your subscription to Royalgrandin Resort has been reactivated.",
         });
       }
       return NextResponse.json({
         success: true,
         alreadySubscribed: true,
-        message: "You are already subscribed! Thank you for staying connected with Royal Grand IN Resorts.",
+        message: "You are already subscribed! Thank you for staying connected with Royalgrandin Resort.",
       });
     }
 

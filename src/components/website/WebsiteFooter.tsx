@@ -51,7 +51,7 @@ export function WebsiteFooter() {
   const footerDescription =
     settings.footerDescription ||
     settings.description ||
-    "Nestled amidst the lush forests and pristine hills of Maredumilli, Royal Grand IN Resorts offers a luxurious retreat where royal hospitality meets the serene wilderness.";
+    "Nestled amidst the lush forests and pristine hills of Maredumilli, Royalgrandin Resort offers a luxurious retreat where royal hospitality meets the serene wilderness.";
 
   const googleMapsUrl =
     settings.googleMapsUrl ||

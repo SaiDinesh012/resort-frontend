@@ -65,7 +65,7 @@ export async function POST(request: Request) {
       paymentStatus: body.paymentStatus || "paid",
       paymentMethod: body.paymentMethod || "card",
       bookingStatus: "confirmed",
-      notes: body.notes || "Booked online via Royal Gradin Website",
+      notes: body.notes || "Booked online via Royalgrandin Resort Website",
       timeline: [
         {
           timestamp: new Date().toISOString(),

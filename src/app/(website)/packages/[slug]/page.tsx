@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await Promise.resolve(params);
   const pkg = await getPackageBySlug(slug);
   return {
-    title: pkg?.name ? `${pkg.name} | Royal Grand IN Resorts` : "Package Details",
+    title: pkg?.name ? `${pkg.name} | Royalgrandin Resort` : "Package Details",
     description: pkg?.description,
   };
 }

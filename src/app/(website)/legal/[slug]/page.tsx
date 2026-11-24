@@ -200,7 +200,7 @@ export default async function LegalPolicyPage({ params }: Props) {
             </div>
 
             <div className="mt-12 pt-6 border-t border-border flex items-center justify-between text-xs text-warm-gray">
-              <span>Published by Royal Grand IN Resorts Legal & Concierge</span>
+              <span>Published by Royalgrandin Resort Legal & Concierge</span>
               <Link href="/" className="inline-flex items-center gap-1 text-primary hover:text-accent font-semibold">
                 <ArrowLeft className="size-3" />
                 <span>Return to Homepage</span>

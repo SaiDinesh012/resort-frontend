@@ -5,9 +5,9 @@ export const mockPackages: Package[] = [
     id: "pkg-001",
     slug: "wilderness-escape",
     name: "Wilderness Escape",
-    tagline: "Reconnect with nature in the heart of the Western Ghats",
+    tagline: "Reconnect with nature in the heart of Maredumilli",
     description: "A carefully crafted 3-night escape for nature lovers seeking serenity and adventure.",
-    longDescription: "Our signature Wilderness Escape package is designed for those who want to experience the magic of the Western Ghats in complete comfort. From guided nature walks through ancient shola forests to candlelit dinners under the stars, every moment is curated to create lasting memories.",
+    longDescription: "Our signature Wilderness Escape package is designed for those who want to experience the magic of Maredumilli in complete comfort. From guided nature walks through ancient forest canopies to candlelit dinners under the stars, every moment is curated to create lasting memories.",
     images: [
       "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1200&q=80",
       "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80",
@@ -20,9 +20,9 @@ export const mockPackages: Package[] = [
     priceType: "per_couple",
     maxGuests: 2,
     includedRoom: "Deluxe Forest Room",
-    activities: ["Guided Nature Walk", "Bird Watching", "Bonfire Evening", "Waterfall Trek"],
+    activities: ["Guided Nature Walk", "Bird Watching", "Bonfire Evening", "Waterfall Trek", "Tribal Bamboo Cooking"],
     meals: { type: "MAP", label: "Modified American Plan", description: "Breakfast and Dinner included" },
-    sightseeing: ["Baba Budangiri Dargah", "Mullayanagiri Peak", "Coffee Plantation Tour"],
+    sightseeing: ["Jalatarangini Waterfalls", "Amruthadhara Falls", "Maredumilli Forest Trail"],
     transport: false,
     itinerary: [
       {
