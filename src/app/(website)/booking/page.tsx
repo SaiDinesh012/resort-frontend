@@ -40,9 +40,11 @@ export default function BookingPage() {
   const [applyingCoupon, setApplyingCoupon] = useState(false);
 
   // Payment state
-  const [paymentMethod, setPaymentMethod] = useState("card");
+  const [paymentMethod, setPaymentMethod] = useState("pay_at_resort");
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
   const [confirmedBookingNum, setConfirmedBookingNum] = useState("");
+  const [confirmedPaymentStatus, setConfirmedPaymentStatus] = useState("pending");
+  const [bookingError, setBookingError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -146,6 +148,7 @@ export default function BookingPage() {
 
   const handleCompleteBooking = async () => {
     try {
+      setBookingError(null);
       setSubmitting(true);
       const payload = {
         type: bookingType,
@@ -175,7 +178,7 @@ export default function BookingPage() {
           couponCode: discount > 0 ? couponCode : undefined,
           total: grandTotal,
         },
-        paymentStatus: "paid",
+        paymentStatus: paymentMethod === "pay_at_resort" ? "pending" : "pending",
         paymentMethod,
         notes: specialRequests || "Booked online via Website",
       };
@@ -187,10 +190,18 @@ export default function BookingPage() {
       });
 
       const data = await res.json();
-      if (res.ok && data.bookingNumber) {
+
+      if (!res.ok) {
+        setBookingError(
+          data.error || "Failed to confirm reservation. Please review your details and try again."
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      if (data && data.bookingNumber) {
         setConfirmedBookingNum(data.bookingNumber);
-      } else {
-        setConfirmedBookingNum(`RG-${Math.floor(100000 + Math.random() * 900000)}`);
+        setConfirmedPaymentStatus(data.paymentStatus || "pending");
       }
 
       if (typeof window !== "undefined" && payload.guestDetails?.email) {
@@ -199,11 +210,11 @@ export default function BookingPage() {
 
       setBookingConfirmed(true);
       setStep(6);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Booking error:", err);
-      setConfirmedBookingNum(`RG-${Math.floor(100000 + Math.random() * 900000)}`);
-      setBookingConfirmed(true);
-      setStep(6);
+      setBookingError(
+        err.message || "A network error occurred while submitting your booking. Please try again."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -635,34 +646,74 @@ export default function BookingPage() {
               <div className="bg-surface rounded-xl border border-border p-6 shadow-card space-y-6">
                 <div className="flex items-center gap-3">
                   <CreditCard className="size-6 text-primary" />
-                  <h2 className="font-serif text-2xl font-semibold text-charcoal">Complete Payment</h2>
+                  <h2 className="font-serif text-2xl font-semibold text-charcoal">Payment & Confirmation</h2>
                 </div>
+
+                {bookingError && (
+                  <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm flex items-start gap-2.5">
+                    <span className="font-bold text-red-500">✕</span>
+                    <div className="flex-1">
+                      <p className="font-semibold">Unable to complete reservation</p>
+                      <p className="text-xs mt-0.5">{bookingError}</p>
+                    </div>
+                  </div>
+                )}
 
                 <div className="space-y-3">
                   <label className="block text-xs font-semibold text-warm-gray uppercase tracking-wider mb-2">
-                    Select Payment Method
+                    Select Payment Option
                   </label>
                   {[
-                    { id: "upi", label: "UPI (Google Pay, PhonePe, Paytm)" },
-                    { id: "card", label: "Credit / Debit Card" },
-                    { id: "netbanking", label: "Net Banking" },
+                    {
+                      id: "pay_at_resort",
+                      label: "Pay at Resort on Check-in (Cash / UPI / Card)",
+                      desc: "Guaranteed reservation. Settle tariff upon check-in at the resort reception.",
+                    },
+                    {
+                      id: "upi",
+                      label: "Instant UPI (Google Pay, PhonePe, Paytm)",
+                      desc: "Pay directly using your preferred UPI app.",
+                    },
+                    {
+                      id: "card",
+                      label: "Credit / Debit Card (Visa, MasterCard, RuPay)",
+                      desc: "Secured encrypted checkout.",
+                    },
+                    {
+                      id: "netbanking",
+                      label: "Net Banking (All Indian Banks)",
+                      desc: "Direct transfer via online banking portal.",
+                    },
                   ].map((m) => (
-                    <label key={m.id} className="flex items-center gap-3 p-3 rounded-md border border-border cursor-pointer hover:bg-background">
+                    <label
+                      key={m.id}
+                      className={`flex items-start gap-3 p-3.5 rounded-lg border cursor-pointer transition-all ${
+                        paymentMethod === m.id
+                          ? "border-primary bg-primary/5 shadow-2xs"
+                          : "border-border hover:bg-background"
+                      }`}
+                    >
                       <input
                         type="radio"
                         name="pay"
                         checked={paymentMethod === m.id}
                         onChange={() => setPaymentMethod(m.id)}
-                        className="accent-primary"
+                        className="accent-primary mt-1"
                       />
-                      <span className="text-sm font-medium text-charcoal">{m.label}</span>
+                      <div>
+                        <span className="text-sm font-semibold text-charcoal block">{m.label}</span>
+                        <span className="text-xs text-warm-gray block mt-0.5">{m.desc}</span>
+                      </div>
                     </label>
                   ))}
                 </div>
 
-                <div className="pt-4 flex justify-between">
+                <div className="pt-4 flex justify-between items-center">
                   <button
-                    onClick={() => setStep(4)}
+                    onClick={() => {
+                      setBookingError(null);
+                      setStep(4);
+                    }}
                     className="px-5 py-2.5 rounded-md border border-border text-charcoal text-sm font-medium hover:bg-border/30 transition-colors flex items-center gap-1 cursor-pointer"
                   >
                     <ArrowLeft className="size-4" /> Back
@@ -672,8 +723,19 @@ export default function BookingPage() {
                     disabled={submitting}
                     className="px-8 py-3.5 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base transition-colors flex items-center gap-2 shadow-sm cursor-pointer disabled:opacity-50"
                   >
-                    {submitting ? <Loader2 className="size-5 animate-spin" /> : <Check className="size-5" />}
-                    Pay {formatCurrency(grandTotal)} & Confirm Booking
+                    {submitting ? (
+                      <>
+                        <Loader2 className="size-5 animate-spin" />
+                        Confirming Reservation...
+                      </>
+                    ) : (
+                      <>
+                        <Check className="size-5" />
+                        {paymentMethod === "pay_at_resort"
+                          ? `Confirm Reservation (${formatCurrency(grandTotal)})`
+                          : `Pay ${formatCurrency(grandTotal)} & Confirm`}
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
@@ -696,7 +758,8 @@ export default function BookingPage() {
                   <div className="flex justify-between"><span className="font-medium text-charcoal">Item:</span> <span>{bookingType === "room" ? selectedRoom?.name : selectedPackage?.name}</span></div>
                   <div className="flex justify-between"><span className="font-medium text-charcoal">Check-in:</span> <span>{checkIn}</span></div>
                   <div className="flex justify-between"><span className="font-medium text-charcoal">Check-out:</span> <span>{checkOut}</span></div>
-                  <div className="flex justify-between"><span className="font-medium text-charcoal">Amount Paid:</span> <span className="font-bold text-charcoal">{formatCurrency(grandTotal)}</span></div>
+                  <div className="flex justify-between"><span className="font-medium text-charcoal">Total Amount:</span> <span className="font-bold text-charcoal">{formatCurrency(grandTotal)}</span></div>
+                  <div className="flex justify-between"><span className="font-medium text-charcoal">Payment Mode:</span> <span className="font-semibold text-primary">{confirmedPaymentStatus === "paid" ? "Paid Online" : "Pay at Resort on Check-in"}</span></div>
                 </div>
 
                 <div className="flex justify-center gap-4 pt-4">

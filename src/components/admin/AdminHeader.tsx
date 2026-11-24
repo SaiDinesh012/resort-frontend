@@ -106,9 +106,18 @@ export function AdminHeader({ onToggleSidebar, title, breadcrumbs = [] }: AdminH
               <Link href="/admin/settings" className="flex items-center gap-2 px-3 py-2 text-xs text-charcoal hover:bg-background rounded-md">
                 <Settings className="size-3.5 text-warm-gray" /> Settings
               </Link>
-              <Link href="/" className="flex items-center gap-2 px-3 py-2 text-xs text-error hover:bg-red-50 rounded-md">
+              <button
+                onClick={async () => {
+                  try {
+                    await fetch("/api/auth", { method: "DELETE" });
+                  } finally {
+                    window.location.href = "/admin/login";
+                  }
+                }}
+                className="w-full text-left flex items-center gap-2 px-3 py-2 text-xs text-error hover:bg-red-50 rounded-md cursor-pointer"
+              >
                 <LogOut className="size-3.5" /> Logout
-              </Link>
+              </button>
             </div>
           )}
         </div>

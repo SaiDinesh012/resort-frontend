@@ -23,6 +23,18 @@ export async function GET(request: Request) {
 
     const { searchParams } = new URL(request.url);
     const force = searchParams.get("force") === "true";
+    const secret = searchParams.get("secret");
+    const expectedSecret = process.env.ADMIN_SEED_SECRET || "GrandinSeedSecret2026";
+
+    if (force && secret !== expectedSecret) {
+      return NextResponse.json(
+        {
+          error:
+            "Unauthorized. A valid seed secret (?secret=...) is required to force reseed the database.",
+        },
+        { status: 401 }
+      );
+    }
 
     const roomCount = await Room.countDocuments();
     if (roomCount > 0 && !force) {
