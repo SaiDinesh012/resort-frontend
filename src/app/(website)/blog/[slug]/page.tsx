@@ -15,14 +15,14 @@ interface Props {
 async function getBlogPostBySlug(slug: string) {
   try {
     await connectDB();
-    const post = await BlogPost.findOne({ slug }).lean();
+    const post = await BlogPost.findOne({ $or: [{ slug }, { id: slug }] }).lean();
     if (post) {
       return JSON.parse(JSON.stringify(post));
     }
   } catch (err) {
     console.error("Error querying blog post by slug:", err);
   }
-  return mockBlogPosts.find((b) => b.slug === slug) || null;
+  return mockBlogPosts.find((b) => b.slug === slug || b.id === slug) || null;
 }
 
 export async function generateStaticParams() {

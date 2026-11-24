@@ -34,14 +34,14 @@ export async function generateStaticParams() {
 async function getRoomBySlug(slug: string) {
   try {
     await connectDB();
-    const doc = await Room.findOne({ slug }).lean();
+    const doc = await Room.findOne({ $or: [{ slug }, { id: slug }] }).lean();
     if (doc) {
       return JSON.parse(JSON.stringify(doc));
     }
   } catch (err) {
     console.error("Error querying room by slug:", err);
   }
-  return mockRooms.find((r) => r.slug === slug) || null;
+  return mockRooms.find((r) => r.slug === slug || r.id === slug) || null;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

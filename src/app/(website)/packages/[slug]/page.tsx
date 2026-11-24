@@ -30,14 +30,14 @@ export async function generateStaticParams() {
 async function getPackageBySlug(slug: string) {
   try {
     await connectDB();
-    const doc = await Package.findOne({ slug }).lean();
+    const doc = await Package.findOne({ $or: [{ slug }, { id: slug }] }).lean();
     if (doc) {
       return JSON.parse(JSON.stringify(doc));
     }
   } catch (err) {
     console.error("Error querying package by slug:", err);
   }
-  return mockPackages.find((p) => p.slug === slug) || null;
+  return mockPackages.find((p) => p.slug === slug || p.id === slug) || null;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
