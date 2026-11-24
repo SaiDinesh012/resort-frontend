@@ -19,6 +19,7 @@ export interface Review {
   id: string;
   customerId: string;
   customerName: string;
+  customerCity?: string;
   customerAvatar?: string;
   bookingId?: string;
   rating: number;

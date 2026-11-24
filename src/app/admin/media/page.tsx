@@ -22,9 +22,9 @@ export default function MediaLibraryPage() {
   const [newMediaData, setNewMediaData] = useState({
     title: "",
     altText: "",
-    url: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200&q=80",
+    url: "",
     category: "resort" as MediaItem["category"],
-    fileName: "resort-photo.jpg",
+    fileName: "",
   });
 
   const categories = ["all", "resort", "rooms", "packages", "activities", "blog", "seo"];
@@ -102,9 +102,9 @@ export default function MediaLibraryPage() {
       setNewMediaData({
         title: "",
         altText: "",
-        url: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200&q=80",
+        url: "",
         category: "resort",
-        fileName: "resort-photo.jpg",
+        fileName: "",
       });
       fetchMedia();
     } catch (err: any) {

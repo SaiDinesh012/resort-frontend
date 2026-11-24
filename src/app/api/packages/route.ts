@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Package from "@/lib/models/Package";
-import { mockPackages } from "@/data/mock/packages";
 
 export async function GET(request: Request) {
   try {
@@ -15,12 +14,7 @@ export async function GET(request: Request) {
     if (status) query.status = status;
     if (featured === "true") query.featured = true;
 
-    let packages = await Package.find(query).sort({ createdAt: -1 });
-
-    if (packages.length === 0 && Object.keys(query).length === 0) {
-      await Package.insertMany(mockPackages);
-      packages = await Package.find({}).sort({ createdAt: -1 });
-    }
+    const packages = await Package.find(query).sort({ createdAt: -1 });
 
     return NextResponse.json(packages);
   } catch (error: any) {
@@ -45,7 +39,7 @@ export async function POST(request: Request) {
       ...body,
       id,
       slug,
-      images: body.images?.length ? body.images : ["https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1200&q=80"],
+      images: Array.isArray(body.images) ? body.images : [],
     });
 
     return NextResponse.json(newPackage, { status: 201 });

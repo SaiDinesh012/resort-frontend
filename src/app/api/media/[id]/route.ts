@@ -1,22 +1,13 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Media from "@/lib/models/Media";
-import { mockMediaItems } from "@/data/mock/content";
 
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
     const { id } = await context.params;
 
-    let media = await Media.findOne({ id });
-
-    if (!media) {
-      const mockMatch = mockMediaItems.find((m) => m.id === id);
-      if (mockMatch) {
-        await Media.create(mockMatch);
-        media = await Media.findOne({ id });
-      }
-    }
+    const media = await Media.findOne({ id });
 
     if (!media) {
       return NextResponse.json({ error: "Media item not found" }, { status: 404 });

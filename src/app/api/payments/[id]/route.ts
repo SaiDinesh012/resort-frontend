@@ -1,22 +1,13 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Payment from "@/lib/models/Payment";
-import { mockPayments } from "@/data/mock/payments";
 
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
     const { id } = await context.params;
 
-    let payment = await Payment.findOne({ $or: [{ id }, { paymentId: id }] });
-
-    if (!payment) {
-      const mockMatch = mockPayments.find((p) => p.id === id || p.paymentId === id);
-      if (mockMatch) {
-        await Payment.create(mockMatch);
-        payment = await Payment.findOne({ $or: [{ id }, { paymentId: id }] });
-      }
-    }
+    const payment = await Payment.findOne({ $or: [{ id }, { paymentId: id }] });
 
     if (!payment) {
       return NextResponse.json({ error: "Payment not found" }, { status: 404 });

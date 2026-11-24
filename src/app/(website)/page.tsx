@@ -548,7 +548,14 @@ export default function HomePage() {
                       </div>
                     )}
                     <div>
-                      <p className="font-sans text-xs font-semibold text-charcoal">{review.customerName}</p>
+                      <p className="font-sans text-xs font-semibold text-charcoal flex items-center gap-1.5 flex-wrap">
+                        <span>{review.customerName}</span>
+                        {review.customerCity && (
+                          <span className="text-accent font-medium text-[11px]">
+                            • {review.customerCity}
+                          </span>
+                        )}
+                      </p>
                       <p className="font-sans text-xs text-warm-gray">
                         {new Date(review.createdAt || Date.now()).toLocaleDateString("en-IN", { month: "short", year: "numeric" })}
                       </p>

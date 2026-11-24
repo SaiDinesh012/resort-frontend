@@ -1,17 +1,11 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Customer from "@/lib/models/Customer";
-import { mockCustomers } from "@/data/mock/customers";
 
 export async function GET(request: Request) {
   try {
     await connectDB();
-    let customers = await Customer.find({}).sort({ createdAt: -1 });
-
-    if (customers.length === 0) {
-      await Customer.insertMany(mockCustomers);
-      customers = await Customer.find({}).sort({ createdAt: -1 });
-    }
+    const customers = await Customer.find({}).sort({ createdAt: -1 });
 
     return NextResponse.json(customers);
   } catch (error: any) {

@@ -35,6 +35,7 @@ export default function ReviewsManagementPage() {
   // New Review Form
   const [newReview, setNewReview] = useState({
     customerName: "",
+    customerCity: "",
     rating: 5,
     title: "",
     body: "",
@@ -132,6 +133,7 @@ export default function ReviewsManagementPage() {
         setIsModalOpen(false);
         setNewReview({
           customerName: "",
+          customerCity: "",
           rating: 5,
           title: "",
           body: "",
@@ -304,7 +306,14 @@ export default function ReviewsManagementPage() {
                       )}
                     </div>
                     <div>
-                      <h4 className="font-bold text-charcoal text-sm leading-tight">{rev.customerName}</h4>
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-bold text-charcoal text-sm leading-tight">{rev.customerName}</h4>
+                        {rev.customerCity && (
+                          <span className="text-[11px] font-medium text-accent">
+                            ({rev.customerCity})
+                          </span>
+                        )}
+                      </div>
                       <div className="flex items-center gap-1 mt-1 text-accent">
                         {[...Array(5)].map((_, i) => (
                           <Star
@@ -404,16 +413,28 @@ export default function ReviewsManagementPage() {
             </div>
 
             <form onSubmit={handleCreateReview} className="space-y-3.5 text-xs">
-              <div>
-                <label className="block text-warm-gray font-semibold mb-1">Guest Full Name *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Sravan Varma"
-                  value={newReview.customerName}
-                  onChange={(e) => setNewReview({ ...newReview, customerName: e.target.value })}
-                  className="w-full px-3 py-2 rounded border border-border text-charcoal bg-white focus:outline-none focus:border-primary"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-warm-gray font-semibold mb-1">Guest Full Name *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Sravan Varma"
+                    value={newReview.customerName}
+                    onChange={(e) => setNewReview({ ...newReview, customerName: e.target.value })}
+                    className="w-full px-3 py-2 rounded border border-border text-charcoal bg-white focus:outline-none focus:border-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-warm-gray font-semibold mb-1">City / Origin (Indian City)</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Hyderabad, Visakhapatnam, Vijayawada"
+                    value={newReview.customerCity}
+                    onChange={(e) => setNewReview({ ...newReview, customerCity: e.target.value })}
+                    className="w-full px-3 py-2 rounded border border-border text-charcoal bg-white focus:outline-none focus:border-primary"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">

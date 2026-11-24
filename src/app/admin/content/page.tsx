@@ -36,8 +36,8 @@ export default function ContentManagementPage() {
     description: "",
     category: "wellness" as Experience["category"],
     duration: "2 hours",
-    price: 1500,
-    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80",
+    price: 0,
+    image: "",
   });
 
   const [newBlog, setNewBlog] = useState({
@@ -46,7 +46,7 @@ export default function ContentManagementPage() {
     content: "",
     category: "Travel Guide",
     author: "Resort Editorial",
-    featuredImage: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200&q=80",
+    featuredImage: "",
   });
 
   const [newFAQ, setNewFAQ] = useState({
@@ -61,7 +61,7 @@ export default function ContentManagementPage() {
     distance: "15 km",
     duration: "30 minutes drive",
     type: "nature" as Attraction["type"],
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80",
+    image: "",
   });
 
   const fetchContent = async () => {
@@ -142,7 +142,7 @@ export default function ContentManagementPage() {
       category: exp.category || "wellness",
       duration: exp.duration || "2 hours",
       price: exp.price || 1500,
-      image: exp.image || "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80",
+      image: exp.image || "",
     });
     setIsModalOpen(true);
   };

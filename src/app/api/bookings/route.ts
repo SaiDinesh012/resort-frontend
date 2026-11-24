@@ -3,7 +3,6 @@ import connectDB from "@/lib/mongodb";
 import Booking from "@/lib/models/Booking";
 import Customer from "@/lib/models/Customer";
 import Payment from "@/lib/models/Payment";
-import { mockBookings } from "@/data/mock/bookings";
 
 export async function GET(request: Request) {
   try {
@@ -31,12 +30,7 @@ export async function GET(request: Request) {
       ];
     }
 
-    let bookings = await Booking.find(query).sort({ createdAt: -1 });
-
-    if (bookings.length === 0 && Object.keys(query).length === 0) {
-      await Booking.insertMany(mockBookings);
-      bookings = await Booking.find({}).sort({ createdAt: -1 });
-    }
+    const bookings = await Booking.find(query).sort({ createdAt: -1 });
 
     return NextResponse.json(bookings);
   } catch (error: any) {

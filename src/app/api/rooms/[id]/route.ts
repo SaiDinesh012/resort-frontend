@@ -1,22 +1,13 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Room from "@/lib/models/Room";
-import { mockRooms } from "@/data/mock/rooms";
 
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
     const { id } = await context.params;
 
-    let room = await Room.findOne({ $or: [{ id }, { slug: id }] });
-
-    if (!room) {
-      const mockMatch = mockRooms.find((r) => r.id === id || r.slug === id);
-      if (mockMatch) {
-        await Room.create(mockMatch);
-        room = await Room.findOne({ $or: [{ id }, { slug: id }] });
-      }
-    }
+    const room = await Room.findOne({ $or: [{ id }, { slug: id }] });
 
     if (!room) {
       return NextResponse.json({ error: "Room not found" }, { status: 404 });

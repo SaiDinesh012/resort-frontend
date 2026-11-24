@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Room from "@/lib/models/Room";
-import { mockRooms } from "@/data/mock/rooms";
 
 export async function GET(request: Request) {
   try {
@@ -17,13 +16,7 @@ export async function GET(request: Request) {
     if (status) query.status = status;
     if (featured === "true") query.featured = true;
 
-    let rooms = await Room.find(query).sort({ createdAt: -1 });
-
-    // Auto seed fallback if DB is empty
-    if (rooms.length === 0 && Object.keys(query).length === 0) {
-      await Room.insertMany(mockRooms);
-      rooms = await Room.find({}).sort({ createdAt: -1 });
-    }
+    const rooms = await Room.find(query).sort({ createdAt: -1 });
 
     return NextResponse.json(rooms);
   } catch (error: any) {
@@ -48,7 +41,7 @@ export async function POST(request: Request) {
       ...body,
       id,
       slug,
-      images: body.images?.length ? body.images : ["https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1200&q=80"],
+      images: Array.isArray(body.images) ? body.images : [],
     });
 
     return NextResponse.json(newRoom, { status: 201 });

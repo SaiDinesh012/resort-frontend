@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
   LayoutDashboard,
   CalendarCheck,
@@ -56,7 +56,7 @@ const navItems = [
       { label: "Upcoming", href: "/admin/bookings?status=confirmed" },
       { label: "Completed", href: "/admin/bookings?status=completed" },
       { label: "Cancelled", href: "/admin/bookings?status=cancelled" },
-      { label: "Refunds & Cancellations", href: "/admin/bookings?status=cancelled" },
+      { label: "Refunds & Cancellations", href: "/admin/bookings?status=refunded" },
     ],
   },
   {
@@ -132,16 +132,61 @@ const navItems = [
   },
 ];
 
-export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
+function AdminSidebarInner({ isOpen, onClose }: AdminSidebarProps) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { settings } = useSiteSettings();
   const siteName = settings.siteName || SITE_NAME;
   const logoUrl = settings.logoUrl;
   const email = settings.email || SITE_EMAIL;
+
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
     Bookings: true,
     Rooms: true,
   });
+
+  const isLinkActive = (href: string) => {
+    if (!href) return false;
+
+    // Handle links with query parameters (e.g. /admin/bookings?status=cancelled)
+    if (href.includes("?")) {
+      const [targetPath, targetQuery] = href.split("?");
+      if (pathname !== targetPath) return false;
+
+      const targetParams = new URLSearchParams(targetQuery);
+      for (const [key, val] of targetParams.entries()) {
+        if (searchParams?.get(key) !== val) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // Handle base links without query parameters (e.g. /admin/bookings, /admin/rooms)
+    if (pathname === href) {
+      // If current URL has active query filters that belong to specific sub-items,
+      // the root "All" item should not be highlighted.
+      const status = searchParams?.get("status");
+      const tab = searchParams?.get("tab");
+      if (status && status !== "all") return false;
+      if (tab) return false;
+      return true;
+    }
+
+    return false;
+  };
+
+  // Auto-expand group if any child is active
+  useEffect(() => {
+    navItems.forEach((item) => {
+      if (item.children) {
+        const hasActiveChild = item.children.some((child) => isLinkActive(child.href));
+        if (hasActiveChild) {
+          setOpenGroups((prev) => ({ ...prev, [item.label]: true }));
+        }
+      }
+    });
+  }, [pathname, searchParams]);
 
   const toggleGroup = (groupLabel: string) => {
     setOpenGroups((prev) => ({ ...prev, [groupLabel]: !prev[groupLabel] }));
@@ -188,7 +233,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
               </span>
             </div>
           </Link>
-          <button onClick={onClose} className="p-1 rounded text-white/60 hover:text-white lg:hidden">
+          <button onClick={onClose} className="p-1 rounded text-white/60 hover:text-white lg:hidden cursor-pointer">
             <X className="size-5" />
           </button>
         </div>
@@ -201,7 +246,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
             const isGroupOpen = openGroups[item.label];
 
             if (!hasChildren && item.href) {
-              const isActive = pathname === item.href;
+              const isActive = isLinkActive(item.href);
               return (
                 <Link
                   key={item.label}
@@ -219,14 +264,21 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
               );
             }
 
+            const isAnyChildActive = item.children?.some((child) => isLinkActive(child.href));
+
             return (
               <div key={item.label} className="space-y-1">
                 <button
                   onClick={() => toggleGroup(item.label)}
-                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-md text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 transition-colors"
+                  className={cn(
+                    "w-full flex items-center justify-between px-3 py-2.5 rounded-md text-sm font-medium transition-colors cursor-pointer",
+                    isAnyChildActive
+                      ? "text-white font-semibold bg-white/5"
+                      : "text-white/70 hover:text-white hover:bg-white/5"
+                  )}
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className="size-4 text-white/60" />
+                    <Icon className={cn("size-4", isAnyChildActive ? "text-accent" : "text-white/60")} />
                     <span>{item.label}</span>
                   </div>
                   {isGroupOpen ? (
@@ -239,7 +291,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                 {isGroupOpen && item.children && (
                   <div className="pl-9 space-y-1 border-l border-white/10 ml-5">
                     {item.children.map((child) => {
-                      const isActive = pathname === child.href;
+                      const isActive = isLinkActive(child.href);
                       return (
                         <Link
                           key={child.label}
@@ -247,7 +299,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                           className={cn(
                             "block px-3 py-1.5 rounded-md text-xs font-medium transition-colors",
                             isActive
-                              ? "text-accent font-semibold bg-white/10"
+                              ? "text-accent font-semibold bg-white/15"
                               : "text-white/60 hover:text-white hover:bg-white/5"
                           )}
                         >
@@ -279,5 +331,13 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
         </div>
       </aside>
     </>
+  );
+}
+
+export function AdminSidebar(props: AdminSidebarProps) {
+  return (
+    <Suspense fallback={<aside className="fixed top-0 left-0 bottom-0 z-50 w-64 bg-primary-dark" />}>
+      <AdminSidebarInner {...props} />
+    </Suspense>
   );
 }

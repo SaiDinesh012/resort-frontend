@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Media from "@/lib/models/Media";
-import { mockMediaItems } from "@/data/mock/content";
 import cloudinary from "@/lib/cloudinary";
 
 export async function GET(request: Request) {
@@ -14,12 +13,7 @@ export async function GET(request: Request) {
     const query: any = {};
     if (category && category !== "all") query.category = category;
 
-    let mediaItems = await Media.find(query).sort({ createdAt: -1 });
-
-    if (mediaItems.length === 0 && Object.keys(query).length === 0) {
-      await Media.insertMany(mockMediaItems);
-      mediaItems = await Media.find({}).sort({ createdAt: -1 });
-    }
+    const mediaItems = await Media.find(query).sort({ createdAt: -1 });
 
     return NextResponse.json(mediaItems);
   } catch (error: any) {

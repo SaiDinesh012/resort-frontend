@@ -1,22 +1,13 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Package from "@/lib/models/Package";
-import { mockPackages } from "@/data/mock/packages";
 
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
     const { id } = await context.params;
 
-    let pkg = await Package.findOne({ $or: [{ id }, { slug: id }] });
-
-    if (!pkg) {
-      const mockMatch = mockPackages.find((p) => p.id === id || p.slug === id);
-      if (mockMatch) {
-        await Package.create(mockMatch);
-        pkg = await Package.findOne({ $or: [{ id }, { slug: id }] });
-      }
-    }
+    const pkg = await Package.findOne({ $or: [{ id }, { slug: id }] });
 
     if (!pkg) {
       return NextResponse.json({ error: "Package not found" }, { status: 404 });

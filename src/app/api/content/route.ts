@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import { BlogPost, Review, FAQ, Attraction, Experience } from "@/lib/models/Content";
-import { mockBlogPosts, mockReviews, mockFAQs, mockAttractions, mockExperiences } from "@/data/mock/content";
 
 export async function GET(request: Request) {
   try {
@@ -14,51 +13,31 @@ export async function GET(request: Request) {
     if (type === "blog") {
       const query: any = {};
       if (status) query.status = status;
-      let posts = await BlogPost.find(query).sort({ createdAt: -1 });
-      if (posts.length === 0 && Object.keys(query).length === 0) {
-        await BlogPost.insertMany(mockBlogPosts);
-        posts = await BlogPost.find({}).sort({ createdAt: -1 });
-      }
+      const posts = await BlogPost.find(query).sort({ createdAt: -1 });
       return NextResponse.json(posts);
     }
 
     if (type === "review") {
       const query: any = {};
       if (status) query.status = status;
-      let reviews = await Review.find(query).sort({ createdAt: -1 });
-      if (reviews.length === 0 && Object.keys(query).length === 0) {
-        await Review.insertMany(mockReviews);
-        reviews = await Review.find({}).sort({ createdAt: -1 });
-      }
+      const reviews = await Review.find(query).sort({ createdAt: -1 });
       return NextResponse.json(reviews);
     }
 
     if (type === "faq") {
-      let faqs = await FAQ.find({}).sort({ order: 1 });
-      if (faqs.length === 0) {
-        await FAQ.insertMany(mockFAQs);
-        faqs = await FAQ.find({}).sort({ order: 1 });
-      }
+      const faqs = await FAQ.find({}).sort({ order: 1 });
       return NextResponse.json(faqs);
     }
 
     if (type === "attraction") {
-      let attractions = await Attraction.find({}).sort({ createdAt: -1 });
-      if (attractions.length === 0) {
-        await Attraction.insertMany(mockAttractions);
-        attractions = await Attraction.find({}).sort({ createdAt: -1 });
-      }
+      const attractions = await Attraction.find({}).sort({ createdAt: -1 });
       return NextResponse.json(attractions);
     }
 
     if (type === "experience") {
       const query: any = {};
       if (status) query.status = status;
-      let experiences = await Experience.find(query).sort({ order: 1, createdAt: -1 });
-      if (experiences.length === 0 && Object.keys(query).length === 0) {
-        await Experience.insertMany(mockExperiences);
-        experiences = await Experience.find({}).sort({ order: 1, createdAt: -1 });
-      }
+      const experiences = await Experience.find(query).sort({ order: 1, createdAt: -1 });
       return NextResponse.json(experiences);
     }
 

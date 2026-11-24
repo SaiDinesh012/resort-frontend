@@ -1,17 +1,11 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Payment from "@/lib/models/Payment";
-import { mockPayments } from "@/data/mock/payments";
 
 export async function GET(request: Request) {
   try {
     await connectDB();
-    let payments = await Payment.find({}).sort({ createdAt: -1 });
-
-    if (payments.length === 0) {
-      await Payment.insertMany(mockPayments);
-      payments = await Payment.find({}).sort({ createdAt: -1 });
-    }
+    const payments = await Payment.find({}).sort({ createdAt: -1 });
 
     return NextResponse.json(payments);
   } catch (error: any) {

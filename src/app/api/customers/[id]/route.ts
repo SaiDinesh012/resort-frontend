@@ -1,22 +1,13 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Customer from "@/lib/models/Customer";
-import { mockCustomers } from "@/data/mock/customers";
 
 export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
   try {
     await connectDB();
     const { id } = await context.params;
 
-    let customer = await Customer.findOne({ $or: [{ id }, { email: id }] });
-
-    if (!customer) {
-      const mockMatch = mockCustomers.find((c) => c.id === id || c.email === id);
-      if (mockMatch) {
-        await Customer.create(mockMatch);
-        customer = await Customer.findOne({ $or: [{ id }, { email: id }] });
-      }
-    }
+    const customer = await Customer.findOne({ $or: [{ id }, { email: id }] });
 
     if (!customer) {
       return NextResponse.json({ error: "Customer not found" }, { status: 404 });

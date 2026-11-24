@@ -6,7 +6,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { SITE_NAME } from "@/lib/constants";
-import { mockExperiences } from "@/data/mock/content";
 import type { Experience } from "@/types/media";
 import {
   Sparkles,
@@ -46,7 +45,7 @@ function ResortExperiencesContent() {
   const searchParams = useSearchParams();
   const urlCategory = searchParams.get("category");
 
-  const [experiences, setExperiences] = useState<Experience[]>(mockExperiences);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>(urlCategory || "all");
 
@@ -63,7 +62,7 @@ function ResortExperiencesContent() {
         const res = await fetch("/api/content?type=experience");
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
+          if (Array.isArray(data)) {
             setExperiences(data);
           }
         }

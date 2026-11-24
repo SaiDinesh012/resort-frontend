@@ -1,114 +1,97 @@
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://resort-booking-1bou.onrender.com/api";
+export const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "https://resort-booking-1bou.onrender.com/api";
 
 export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
   const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  const url = endpoint.startsWith("http") ? endpoint : `${API_BASE_URL}${cleanEndpoint}`;
 
-  // Try configured backend URL first
-  try {
-    const url = endpoint.startsWith("http") ? endpoint : `${API_BASE_URL}${cleanEndpoint}`;
-    const res = await fetch(url, {
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
+  });
+
+  if (res.ok) {
+    return await res.json();
+  }
+
+  // If call to backend fails or is not ok, also try relative Next.js route if client-side
+  if (typeof window !== "undefined" && !endpoint.startsWith("http")) {
+    const localRes = await fetch(`/api${cleanEndpoint}`, {
       ...options,
       headers: {
         "Content-Type": "application/json",
         ...(options.headers || {}),
       },
     });
-
-    if (res.ok) {
-      return await res.json();
+    if (localRes.ok) {
+      return await localRes.json();
     }
-  } catch (backendErr) {
-    // If backend at localhost:5000 is unreachable, try relative Next.js API route as fallback
-    if (typeof window !== "undefined" && !endpoint.startsWith("http") && API_BASE_URL.includes("5000")) {
-      try {
-        const fallbackRes = await fetch(`/api${cleanEndpoint}`, {
-          ...options,
-          headers: {
-            "Content-Type": "application/json",
-            ...(options.headers || {}),
-          },
-        });
-        if (fallbackRes.ok) {
-          return await fallbackRes.json();
-        }
-      } catch (fallbackErr) {
-        // Fallback also failed
-      }
-    }
-    throw backendErr;
   }
+
+  const errData = await res.json().catch(() => ({}));
+  throw new Error(errData.error || `API request failed with status ${res.status}`);
 }
 
 export async function getSiteSettings(key = "site_config") {
-  // First try API_BASE_URL
   try {
-    const res = await fetch(`${API_BASE_URL}/settings?key=${key}`);
+    const res = await fetch(`${API_BASE_URL}/settings?key=${key}`, { cache: "no-store" });
     if (res.ok) return await res.json();
   } catch (e) {
-    // Fallback to Next.js API
-    try {
-      const res = await fetch(`/api/settings?key=${key}`);
+    if (typeof window !== "undefined") {
+      const res = await fetch(`/api/settings?key=${key}`, { cache: "no-store" });
       if (res.ok) return await res.json();
-    } catch (err) {
-      console.warn("Failed to fetch settings from both sources", err);
     }
   }
   return null;
 }
 
 export async function saveSiteSettings(data: any, key = "site_config") {
-  let saved = null;
-  // Try API_BASE_URL
   try {
     const res = await fetch(`${API_BASE_URL}/settings?key=${key}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    if (res.ok) saved = await res.json();
+    if (res.ok) return await res.json();
   } catch (e) {
-    // Fallback to Next.js API
+    // continue to local API
   }
 
-  if (!saved) {
-    const res = await fetch(`/api/settings?key=${key}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    if (!res.ok) throw new Error("Failed to save settings");
-    saved = await res.json();
+  const res = await fetch(`/api/settings?key=${key}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || "Failed to save settings");
   }
-
-  return saved;
+  return await res.json();
 }
 
 export async function uploadLogoFile(fileDataOrUrl: { fileData?: string; url?: string }) {
-  let result = null;
-  // Try API_BASE_URL
   try {
     const res = await fetch(`${API_BASE_URL}/settings/logo`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(fileDataOrUrl),
     });
-    if (res.ok) result = await res.json();
+    if (res.ok) return await res.json();
   } catch (e) {
-    // Fallback
+    // continue to local API
   }
 
-  if (!result) {
-    const res = await fetch(`/api/settings/logo`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(fileDataOrUrl),
-    });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || "Failed to upload logo");
-    }
-    result = await res.json();
+  const res = await fetch(`/api/settings/logo`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(fileDataOrUrl),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || "Failed to upload logo");
   }
-
-  return result;
+  return await res.json();
 }
